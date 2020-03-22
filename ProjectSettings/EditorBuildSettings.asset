@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: b47950e387f51ac4485060e084c4c1b4
+  - enabled: 1
+    path: Assets/Scenes/gameNormal.unity
+    guid: 7f9160252c506f94eb316fa5d5a07dcc
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c54bbe6d149b35a45a80fdeda1809339,
       type: 2}
