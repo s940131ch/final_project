@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2067402452, guid: bab6fa851cf5a1a4bba3cec5f191cb8e, type: 3}
+  m_Name: VuforiaConfiguration
+  m_EditorClassIdentifier: 
+  vuforia:
+    vuforiaLicenseKey: AUi/6nf/////AAABmbrwJ+jSfEj9oOZaJjTznBIpb/1DV84giSCcRvTtzNc+8Go27QOGoygQYpcKRqOH6ftkvQiEjFPIqAWxIp9AYbFdhmWt3CILdZOviQAsoBWMPAlVM0YrQyUWze/waEsrKAzOTML70jDvO8RKSYIN/cUhWTDH9vvnDf0KIatSGfZGZWXTQaGBRYidWNRZvalqKJV9IM1KiCvgSSRbMiep+jiDzaCpUD8aURkABJ1sFmBttskfBPLrNV5lBo0X/7Fqpx/TYkBgN0MdTRxJJUo2OaqoqB0YNv9tCbsebo2gctSuwBg8zSMAU7IhAlpF/KefeXdntXquth0vxmwQs9YxQey5VUYKB8QtQyrojzr/+hti
+    ufoLicenseKey: QWRLVlpldi8vLy8vQUFBQUtQQlIyR0RnK2tqMG5lTU0yK3g2QjhCNzB2N1ZYd0pJMi9pSEhrNGxBVjh3cG9wM1lZNXpPK3ZvMXJrTUZ4VGFHTmV5a1lFaGwwVzY3WngrRllNYnl2WDhZRHB4a1krd2NZdDJhSjRkVGExRFFWbUZmcTdKNEtSNTFvbTBxWEs3NTE2NjVHM2kyektjOXBNaE1hM3N4a0FlbGtCZDRieGZhRitYNy90bmJqQSs2WnBYcXhtOVZVVlE1TVoxN3NSVVU3VWdacHVjWGl2M1dKL1E5U0RiV0ZjcjRVcnVzbGFUanBkWjJvUm5PbWpYZTRwaGZRQnlQODMrTHptc2tPWHUzZjREdk9ySmljVStNdEtYN2hZTUlLNUorOGtaaWJFVnBhTSszQWNSUkRJcHBESVRGU2lCZUNUWkFGa2hTYm5nMkxGN0FMYjExUW55N3MwQjFxbmVRQ3k1RjZrYnBjSDJ2SU4wWE94YlJ6VG0=
+    delayedInitialization: 0
+    cameraDeviceModeSetting: -1
+    maxSimultaneousImageTargets: 1
+    maxSimultaneousObjectTargets: 1
+    virtualSceneScaleFactor: 1
+    useDelayedLoadingObjectTargets: 0
+    modelTargetRecoWhileExtendedTracked: 1
+    version: 9.0.12
+    eulaAcceptedVersions: '{"Values":["8.6","8.5","9.0"]}'
+    modelTargetMode: 0
+  database:
+    disableModelExtraction: 0
+  videoBackground:
+    numDivisions: 2
+    videoBackgroundShader: {fileID: 4800000, guid: f40623b353e2f1943b1b3ba42975db7a,
+      type: 3}
+    videoBackgroundEnabled: 1
+  deviceTracker:
+    autoStartTracker: 0
+    arcoreRequirement: 0
+    autoImportArcore: 0
+  playmode:
+    playModeType: 0
+  webcam:
+    renderTextureLayer: 30
