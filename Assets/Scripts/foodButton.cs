@@ -7,57 +7,61 @@ using UnityEngine.UI;
 
 public class foodButton : MonoBehaviour
 {
-    public Button a;
+    /*public Button a;
     public Button parent;
     Button newButton;
-    bool flag = false;
-    Vector3 v3;
-    float x, y, z;
+    bool haveButton = false;
+    float speed = 400.0f;
+    float time = 0.0f;*/
+
+    public GameObject Panel;
+    public GameObject MainList;
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Button>().onClick.AddListener(GenerateButton);
-        y = 0.0f;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(y + "," + flag);
+     
         
     }
 
     public void GenerateButton()
     {
-        if (!flag)
+        /*if (!haveButton)
         {
-            Debug.Log(x + " , " + y + " , " + z);
             newButton = Instantiate(a);
             newButton.transform.SetParent(parent.transform);
-            while (y <= 150.0f)
+            newButton.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+            while (speed > 0.0f)
             {
-                y += 3.0f;
-                newButton.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, y, 0.0f);
+                newButton.GetComponent<Rigidbody>().velocity = new Vector3(0, speed, 0);
+                Debug.Log(speed);
             }
-            flag = true;
+            Debug.Log("STOP");
+            haveButton = true;
+           
         }
-        else if (flag)
+        else if (haveButton)
         {
-            while (y >= 0.0f)
+            while (speed > 0.0f)
             {
-                y -= 3.0f;
-                newButton.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, y, 0.0f);
+                newButton.GetComponent<Rigidbody>().velocity = new Vector3(0, -speed, 0);
+                speed -= 20.0f;
             }
-
             Destroy(gameObject.transform.GetChild(0).gameObject);
-            flag = false;
+            haveButton = false;
+            speed = 100.0f;
+        }*/
+        if (Panel != null)
+        {
+            bool isActive = Panel.activeSelf;
+            Panel.SetActive(!isActive);
         }
-
-        
- 
-        
     }
-
 
 
     public void OnClick()

@@ -4,13 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class loadGame : MonoBehaviour
+public class menuMananger : MonoBehaviour
 {
-    public Button button;
     // Start is called before the first frame update
     void Start()
     {
-        button.onClick.AddListener(onClick);
+        
     }
 
     // Update is called once per frame
@@ -19,8 +18,8 @@ public class loadGame : MonoBehaviour
         
     }
 
-    public void onClick()
+    public void onClick(string sceneName)
     {
-        SceneManager.LoadScene("gameNormal");
+        SceneManager.LoadScene(sceneName);
     }
 }
