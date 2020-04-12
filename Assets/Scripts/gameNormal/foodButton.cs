@@ -31,31 +31,6 @@ public class foodButton : MonoBehaviour
 
     public void GenerateButton()
     {
-        /*if (!haveButton)
-        {
-            newButton = Instantiate(a);
-            newButton.transform.SetParent(parent.transform);
-            newButton.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-            while (speed > 0.0f)
-            {
-                newButton.GetComponent<Rigidbody>().velocity = new Vector3(0, speed, 0);
-                Debug.Log(speed);
-            }
-            Debug.Log("STOP");
-            haveButton = true;
-           
-        }
-        else if (haveButton)
-        {
-            while (speed > 0.0f)
-            {
-                newButton.GetComponent<Rigidbody>().velocity = new Vector3(0, -speed, 0);
-                speed -= 20.0f;
-            }
-            Destroy(gameObject.transform.GetChild(0).gameObject);
-            haveButton = false;
-            speed = 100.0f;
-        }*/
         if (Panel != null)
         {
             bool isActive = Panel.activeSelf;

@@ -1,12 +1,10 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class gameNormalManager : MonoBehaviour
+public class ARSceneManager : MonoBehaviour
 {
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,11 +16,8 @@ public class gameNormalManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("gameNormal");
         }
-    }
-    public void onClick(string scene)
-    {
-        SceneManager.LoadScene(scene);
+        
     }
 }
