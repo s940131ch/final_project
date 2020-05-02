@@ -8,19 +8,22 @@ public class CatController : MonoBehaviour
     float direction = 0.0f;     //朝向前方
     float timeOfDirection = 0;  //要轉換方向的時間
     float timeOfWalking = 0;    //走的時間
-    float timeOfHunger = 0;     //飢餓度扣除時間
-    float timeOfEating = 3.0f;  //吃飯時間
+    float timeOfHunger = 0.0f;  //飢餓度扣除時間
+    float timeOfWater = 0.0f;   //口渴值扣除時間 
+    float timeOfEating = 5.0f;  //吃飯時間
+    float timeOfDrinking = 3.0f;  //吃飯時間
     float speed = 1.5f;         //走路速度
     bool isOk = false;          //是否決定好方向?
-    bool canEat = false;
+    bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
     float timeCount = 0.0f;
+    GameObject temp;
 
 
-    public float hungerValue = 100.0f;
-    /*public float thirstValue;
-    public float cohesion;*/
-    public HungerController HC;
+    public float healthValue = 100.0f;
+    public float waterValue = 100.0f;
+    public float loveValue = 100.0f;
+    public StatusController SC;
 
     Animator am;
     // Start is called before the first frame update
@@ -30,12 +33,15 @@ public class CatController : MonoBehaviour
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
 
-        HC.health = hungerValue - 100.0f;
+        SC.setHealth(healthValue);
+        SC.setLove(loveValue);
+        SC.setWater(waterValue);
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*如果沒有需要Task則隨機走路*/
         if (handleTask.isEmpty())
         {
             /*原地隨機走路*/
@@ -59,39 +65,82 @@ public class CatController : MonoBehaviour
                 isOk = false;
             }
         }
+        /*否則做Task*/
         else
         {
-            GameObject temp;
-            temp = handleTask.taskQuene[handleTask.Front + 1];
+            /*拿到第一個Task的內容*/
+            if (!isDoingTask)
+            {
+                temp = handleTask.getFirst();       
+                isDoingTask = true;
+            }
+
+            /*看向Task*/
             Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
-            Debug.Log(Vector3.Distance(temp.transform.position, transform.position));
-            if (Vector3.Distance(temp.transform.position, transform.position) >= 3.0)
+
+            /*如果是吃東西的任務的話*/
+            if (temp.name == "bowlHasFood(Clone)" || temp.name == "bowlHasWater(Clone)")
             {
-                timeOfEating = 3.0f;
-                walk();
-            }
-            else
-            {
-                eating();
-                timeOfEating -= Time.deltaTime;
-                if(timeOfEating < 0)
+                /*走向餐盤*/
+                if (Vector3.Distance(temp.transform.position, transform.position) >= 3.0)
                 {
-                    Destroy(handleTask.taskQuene[handleTask.Front + 1]);
-                    HC.health = 0.0f;
-                    handleTask.popTask();
+                    walk();
+                    if (temp.name == "bowlHasFood(Clone)")
+                        timeOfEating = 3.0f;
+                    else if (temp.name == "bowlHasWater(Clone)")
+                        timeOfDrinking = 5.0f;
                 }
+                /*走到之後開始吃*/
+                else
+                {
+                    eating();
+                    if (temp.name == "bowlHasFood(Clone)")
+                    {
+                        timeOfEating -= Time.deltaTime;
+                        if (timeOfEating < 0)
+                        {
+                            Destroy(handleTask.taskQueue[(handleTask.Front + 1) % handleTask.MAX]);
+                            SC.setHealth(100.0f);
+                            handleTask.popTask();
+                            isDoingTask = false;
+                        }
+                    }
+                    else if (temp.name == "bowlHasWater(Clone)")
+                    {
+                        timeOfDrinking -= Time.deltaTime;
+                        if (timeOfDrinking < 0)
+                        {
+                            Destroy(handleTask.taskQueue[(handleTask.Front + 1) % handleTask.MAX]);
+                            SC.setWater(100.0f);
+                            handleTask.popTask();
+                            isDoingTask = false;
+                        }
+                    }
+                }
+             
             }
+
             timeCount = timeCount + Time.deltaTime * speed;
         }
 
-        /*每隔10秒扣除飢餓度*/
+        /*每隔5秒扣除飢餓度*/
         timeOfHunger += Time.deltaTime;
-        if(timeOfHunger > 10.0f && HC.health > -100.0f)
+        timeOfWater += Time.deltaTime;
+        if (timeOfHunger > 5.0f && SC.getHealth() > 0.0f)
         {
-            HC.health -= 5.0f;
+            SC.minusHealth(0.1f);
             timeOfHunger = 0.0f;
         }
+
+        /*每隔3秒扣除口渴值*/
+        if (timeOfWater > 3.0f && SC.getWater() > 0.0f)
+        {
+            float waterTemp = SC.getWater();
+            SC.minusWater(0.1f);
+            timeOfWater = 0.0f;
+        }
+
 
     }
     private void decideDirection()
@@ -107,13 +156,12 @@ public class CatController : MonoBehaviour
         am.SetInteger("Status", 1);
         transform.position += transform.forward * Time.deltaTime * speed;
   
-        Debug.Log("正在走路");
+        //Debug.Log("正在走路");
     }
     private void eating()
     {
-        am.SetInteger("Status", 2);
         
-
+        am.SetInteger("Status", 2);
         Debug.Log("正在吃飯");
     }
 

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class normalCreateFood : MonoBehaviour
+public class normalFeed: MonoBehaviour
 {
     public GameObject foodSource;
+    public GameObject waterSource;
     GameObject food = null;
+    GameObject water = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +31,15 @@ public class normalCreateFood : MonoBehaviour
             handleTask.pushTask(food);
         }
 
+    }
+    public void creatWater()
+    {
+        if (water == null)
+        {
+            water = Instantiate<GameObject>(waterSource);
+            water.GetComponent<Transform>().position = new Vector3(-2.0f, 0.0f, 0.0f);
+            water.GetComponent<Transform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            handleTask.pushTask(water);
+        }
     }
 }

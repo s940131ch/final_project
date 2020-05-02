@@ -6,14 +6,14 @@ public static class handleTask
 {
     public static int Front = 0;
     public static int Rear = 0;
-    public static int MAX = 10;
-    public static GameObject[] taskQuene = new GameObject[MAX];
+    public static int MAX = 3;
+    public static GameObject[] taskQueue = new GameObject[MAX];
     public static void pushTask(GameObject obj)
     {
 		if (!isFull())
 		{
 			Rear = (Rear + 1) % MAX;
-			taskQuene[Rear] = obj;
+			taskQueue[Rear] = obj;
 			//Debug.Log(taskQuene[Rear].transform.position);
 		}
 	}
@@ -21,9 +21,7 @@ public static class handleTask
 	{
 		if (!isEmpty())
 		{
-			
 			Front = (Front + 1) % MAX;
-	
 		}
 	}
 	public static bool isFull()
@@ -35,6 +33,11 @@ public static class handleTask
 		return Front == Rear;
 	}
 
+	public static GameObject getFirst()
+	{
+		Debug.Log(((Front + 1) % MAX) + "front + 1 % MAX");
+		return taskQueue[((Front + 1) % MAX)];
+	}
 
 }
 
