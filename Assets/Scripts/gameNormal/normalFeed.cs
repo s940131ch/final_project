@@ -8,6 +8,7 @@ public class normalFeed: MonoBehaviour
     public GameObject waterSource;
     GameObject food = null;
     GameObject water = null;
+    public handleTask HTK;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +29,7 @@ public class normalFeed: MonoBehaviour
             food = Instantiate<GameObject>(foodSource);
             food.GetComponent<Transform>().position = new Vector3(1.0f, 0.0f, 0.0f);
             food.GetComponent<Transform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            handleTask.pushTask(food);
+            HTK.pushTask(food);
         }
 
     }
@@ -39,7 +40,7 @@ public class normalFeed: MonoBehaviour
             water = Instantiate<GameObject>(waterSource);
             water.GetComponent<Transform>().position = new Vector3(-2.0f, 0.0f, 0.0f);
             water.GetComponent<Transform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            handleTask.pushTask(water);
+            HTK.pushTask(water);
         }
     }
 }

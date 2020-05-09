@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class handleTask : MonoBehaviour
+public class handleTaskAR : MonoBehaviour
 {
-	int Front = 0;
-	int Rear = 0;
+
+	public int Front = 0;
+	public int Rear = 0;
 	public int MAX = 5;
 	public GameObject[] taskQueue;
 
@@ -15,16 +16,17 @@ public class handleTask : MonoBehaviour
 	}
 	void Update()
 	{
-
+		Debug.Log("Rear" + Rear);
+		Debug.Log("Front" + Front);
 	}
 	public void pushTask(GameObject obj)
 	{
-
+		
 		if (!isFull())
 		{
 			Rear = (Rear + 1) % MAX;
 			taskQueue[Rear] = obj;
-
+			
 		}
 		else
 		{
@@ -37,7 +39,7 @@ public class handleTask : MonoBehaviour
 		{
 			taskQueue[Front] = null;
 			Front = (Front + 1) % MAX;
-
+			
 		}
 		else
 		{
@@ -52,7 +54,7 @@ public class handleTask : MonoBehaviour
 	}
 	public bool isEmpty()
 	{
-
+		
 		return Front == Rear;
 	}
 
@@ -61,4 +63,6 @@ public class handleTask : MonoBehaviour
 		Debug.Log(((Front + 1) % MAX) + "front + 1 % MAX");
 		return taskQueue[((Front + 1) % MAX)];
 	}
+
+
 }

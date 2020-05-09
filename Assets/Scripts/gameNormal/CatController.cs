@@ -16,6 +16,7 @@ public class CatController : MonoBehaviour
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
+    
     float timeCount = 0.0f;
     GameObject temp;
 
@@ -23,9 +24,9 @@ public class CatController : MonoBehaviour
     public float healthValue = 100.0f;
     public float waterValue = 100.0f;
     public float loveValue = 100.0f;
-    public StatusController SC;
 
     Animator am;
+    public handleTask HTK;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,16 +34,16 @@ public class CatController : MonoBehaviour
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
 
-        SC.setHealth(healthValue);
-        SC.setLove(loveValue);
-        SC.setWater(waterValue);
+        StatusController.setHealth(healthValue);
+        StatusController.setLove(loveValue);
+        StatusController.setWater(waterValue);
     }
 
     // Update is called once per frame
     void Update()
     {
         /*如果沒有需要Task則隨機走路*/
-        if (handleTask.isEmpty())
+        if (HTK.isEmpty())
         {
             /*原地隨機走路*/
             timeOfDirection += Time.deltaTime;
@@ -71,7 +72,7 @@ public class CatController : MonoBehaviour
             /*拿到第一個Task的內容*/
             if (!isDoingTask)
             {
-                temp = handleTask.getFirst();       
+                temp = HTK.getFirst();       
                 isDoingTask = true;
             }
 
@@ -100,9 +101,9 @@ public class CatController : MonoBehaviour
                         timeOfEating -= Time.deltaTime;
                         if (timeOfEating < 0)
                         {
-                            Destroy(handleTask.taskQueue[(handleTask.Front + 1) % handleTask.MAX]);
-                            SC.setHealth(100.0f);
-                            handleTask.popTask();
+                            Destroy(HTK.getFirst());
+                            StatusController.setHealth(100.0f);
+                            HTK.popTask();
                             isDoingTask = false;
                         }
                     }
@@ -111,9 +112,9 @@ public class CatController : MonoBehaviour
                         timeOfDrinking -= Time.deltaTime;
                         if (timeOfDrinking < 0)
                         {
-                            Destroy(handleTask.taskQueue[(handleTask.Front + 1) % handleTask.MAX]);
-                            SC.setWater(100.0f);
-                            handleTask.popTask();
+                            Destroy(HTK.getFirst());
+                            StatusController.setWater(100.0f);
+                            HTK.popTask();
                             isDoingTask = false;
                         }
                     }
@@ -127,17 +128,17 @@ public class CatController : MonoBehaviour
         /*每隔5秒扣除飢餓度*/
         timeOfHunger += Time.deltaTime;
         timeOfWater += Time.deltaTime;
-        if (timeOfHunger > 5.0f && SC.getHealth() > 0.0f)
+        if (timeOfHunger > 5.0f && StatusController.getHealth() > 0.0f)
         {
-            SC.minusHealth(0.1f);
+            StatusController.minusHealth(0.1f);
             timeOfHunger = 0.0f;
         }
 
         /*每隔3秒扣除口渴值*/
-        if (timeOfWater > 3.0f && SC.getWater() > 0.0f)
+        if (timeOfWater > 3.0f && StatusController.getWater() > 0.0f)
         {
-            float waterTemp = SC.getWater();
-            SC.minusWater(0.1f);
+            
+            StatusController.minusWater(0.1f);
             timeOfWater = 0.0f;
         }
 
