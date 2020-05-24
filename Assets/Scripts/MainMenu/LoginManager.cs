@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets;
 
 public class LoginManager : MonoBehaviour
 {
@@ -22,19 +21,18 @@ public class LoginManager : MonoBehaviour
         
     }
 
-    public void Signin()
+    /*public void Signin()
     {
         Debug.Log(ID.text);
-        SqlAccess sql = new SqlAccess();
-        sql.Select(ID.text, Password.text);
-        sql.Close();
+        AddComponent()
+        if (con.Signin(ID.text, Password.text) == true)
+            Debug.Log("登入成功");
+        else
+            Debug.Log("登入失敗");
     }
-
+    */
     public void Signup()
     {
-        Debug.Log(ID.text);
-        SqlAccess sql = new SqlAccess();
-        sql.Insert(ID.text, Password.text);
-        sql.Close();
+
     }
 }
