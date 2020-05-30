@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +9,28 @@ public static class StatusController
     static private float health = 100.0f;
     static private float water = 100.0f;
     static private float love = 100.0f;
-
+    static private int PetType = 0;
+    static private int HasPet = 0;
     // Start is called before the first frame update
 
     // Update is called once per frame
 
-
+    public static void setPetType(int n)
+    {
+        PetType = n;
+    }
+    public static int getPetType()
+    {
+        return PetType;
+    }
+    public static void setHasPet(int n)
+    {
+        HasPet = n;
+    }
+    public static int getHasPet()
+    {
+        return HasPet;
+    }
     public static void setHealth(float H)
     {
         health = H;

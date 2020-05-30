@@ -23,6 +23,12 @@ public class menuMananger : MonoBehaviour
 
     public void onClick(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        if(StatusController.getHasPet() == 0)
+        {
+            
+        }
+        else
+            SceneManager.LoadScene(sceneName);
     }
+    
 }

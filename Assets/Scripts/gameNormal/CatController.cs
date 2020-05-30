@@ -16,15 +16,9 @@ public class CatController : MonoBehaviour
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
-    
+
     float timeCount = 0.0f;
     GameObject temp;
-
-
-    public float healthValue = 100.0f;
-    public float waterValue = 100.0f;
-    public float loveValue = 100.0f;
-
     Animator am;
     public handleTask HTK;
     // Start is called before the first frame update
@@ -33,10 +27,6 @@ public class CatController : MonoBehaviour
         transform.position = new Vector3(0.0f, 0.05f, 0.0f);
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
-
-        StatusController.setHealth(healthValue);
-        StatusController.setLove(loveValue);
-        StatusController.setWater(waterValue);
     }
 
     // Update is called once per frame
@@ -45,6 +35,7 @@ public class CatController : MonoBehaviour
         /*如果沒有需要Task則隨機走路*/
         if (HTK.isEmpty())
         {
+            
             /*原地隨機走路*/
             timeOfDirection += Time.deltaTime;
             //Debug.Log(timeOfDirection);
@@ -66,6 +57,7 @@ public class CatController : MonoBehaviour
                 isOk = false;
             }
         }
+
         /*否則做Task*/
         else
         {
@@ -83,12 +75,14 @@ public class CatController : MonoBehaviour
             /*如果是吃東西的任務的話*/
             if (temp.name == "bowlHasFood(Clone)" || temp.name == "bowlHasWater(Clone)")
             {
+
+
                 /*走向餐盤*/
-                if (Vector3.Distance(temp.transform.position, transform.position) >= 3.0)
+                if (Vector3.Distance(temp.transform.position, transform.position) >= 2.0f)
                 {
                     walk();
                     if (temp.name == "bowlHasFood(Clone)")
-                        timeOfEating = 3.0f;
+                        timeOfEating = 5.0f;
                     else if (temp.name == "bowlHasWater(Clone)")
                         timeOfDrinking = 5.0f;
                 }
@@ -119,7 +113,7 @@ public class CatController : MonoBehaviour
                         }
                     }
                 }
-             
+
             }
 
             timeCount = timeCount + Time.deltaTime * speed;
