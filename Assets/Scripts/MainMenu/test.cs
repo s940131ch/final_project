@@ -38,20 +38,18 @@ public class test : MonoBehaviour
                 sear = true;
                 text = www.text;
                 string[] value = text.Split(',');
-                Debug.Log("hunger :" + value[0]);
-                Debug.Log("thir :" + value[1]);
-                Debug.Log("love :" + value[2]);
                 Debug.Log("float hun: " + float.Parse(value[0]));
                 Debug.Log("float thir: " + float.Parse(value[1]));
                 Debug.Log("float love: " + float.Parse(value[2]));
+                StatusController.setHealth(float.Parse(value[0]));
+                StatusController.setWater(float.Parse(value[1]));
             }
             else
                 sear = false;
         }
 
         Debug.Log(sear);
-        StatusController.setHealth(100.0f);
-        StatusController.setWater(100.0f);
+        
 
     }
 }
