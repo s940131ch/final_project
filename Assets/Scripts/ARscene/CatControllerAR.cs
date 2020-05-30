@@ -23,11 +23,6 @@ public class CatControllerAR : MonoBehaviour
     GameObject temp;
     public GameObject origin;
 
-
-    public float healthValue = 100.0f;
-    public float waterValue = 100.0f;
-    public float loveValue = 100.0f;
-
     Animator am;
     public handleTaskAR HTK;
     // Start is called before the first frame update
@@ -121,7 +116,7 @@ public class CatControllerAR : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("碰到東西了");
+        Debug.Log(other.name);
         if (other.name == "bowlHasFood")
         {
             Debug.Log("碰到碗盤了");
