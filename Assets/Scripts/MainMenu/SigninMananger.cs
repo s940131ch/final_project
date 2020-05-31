@@ -37,8 +37,9 @@ public class SigninMananger : MonoBehaviour
 
         if (www.error != null)
         {
-            Debug.Log(www.error);
-            
+            SQLErrorMesage.SetActive(true);
+            SQLErrorMesage.transform.GetChild(0).GetComponent<Text>().text = "伺服器關機中";
+            Debug.Log(www.error);   
         }
         else
         {
@@ -49,7 +50,7 @@ public class SigninMananger : MonoBehaviour
                 text = www.text;
                 string[] value = text.Split(',');
 
-                
+            
                 Debug.Log("hunger :" + value[0]);
                 Debug.Log("thir :" + value[1]);
                 Debug.Log("love :" + value[2]);
@@ -64,6 +65,12 @@ public class SigninMananger : MonoBehaviour
                 StatusController.setHasPet(int.Parse(value[3]));
                 StatusController.setPetType(int.Parse(value[4]));
                 Destroy(ip);
+                Debug.Log("hunger :" + value[0]);
+                Debug.Log("thir :" + value[1]);
+                Debug.Log("love :" + value[2]);
+                Debug.Log("float hun: " + float.Parse(value[0]));
+                Debug.Log("float thir: " + float.Parse(value[1]));
+                Debug.Log("float love: " + float.Parse(value[2]));
             }
             else
             {

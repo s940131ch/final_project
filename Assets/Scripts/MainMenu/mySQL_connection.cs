@@ -11,26 +11,26 @@ using UnityEngine.UI;
 
 public class mySQL_connection : MonoBehaviour
 {
-
-    public void search()
+    IEnumerator<WWW> UpdatePetData(string ID, string Pass, int HasPet, int PetType)
     {
-            StartCoroutine(IGetData());
-    }
-
-    IEnumerator IGetData()
-    {
-        WWW www = new WWW("http://203.222.24.233:80/search.php?username=abc&password=abc");
+        WWW www = new WWW("http://203.222.24.233/Update.php?Username=" + ID + "&Password=" + Pass + "&HasPet=" + HasPet + "&PetType=" + PetType);
         yield return www;
 
-        if(www.error == null)
+        if (www.error != null)
         {
-            Debug.Log("登入失敗");
-            yield return null;
+            Debug.Log(www.error);   
         }
         else
         {
-            Debug.Log("登入成功");
-            yield return null;
+            Debug.Log("www message:" + www.text);
+            if (www.text.Length == 1)
+            {
+                Debug.Log("成功更新");
+            }
+            else
+            {
+                Debug.Log("更新失敗");
+            }
         }
     }
 
