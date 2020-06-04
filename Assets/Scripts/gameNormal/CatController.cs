@@ -20,7 +20,7 @@ public class CatController : MonoBehaviour
     float timeCount = 0.0f;
     GameObject temp;
     Animator am;
-    public handleTask HTK;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +33,7 @@ public class CatController : MonoBehaviour
     void Update()
     {
         /*如果沒有需要Task則隨機走路*/
-        if (HTK.isEmpty())
+        if (handleTask.isEmpty())
         {
             
             /*原地隨機走路*/
@@ -64,7 +64,7 @@ public class CatController : MonoBehaviour
             /*拿到第一個Task的內容*/
             if (!isDoingTask)
             {
-                temp = HTK.getFirst();       
+                temp = handleTask.getFirst();       
                 isDoingTask = true;
             }
 
@@ -95,9 +95,9 @@ public class CatController : MonoBehaviour
                         timeOfEating -= Time.deltaTime;
                         if (timeOfEating < 0)
                         {
-                            Destroy(HTK.getFirst());
+                            Destroy(handleTask.getFirst());
                             StatusController.setHealth(100.0f);
-                            HTK.popTask();
+                            handleTask.popTask();
                             isDoingTask = false;
                         }
                     }
@@ -106,9 +106,9 @@ public class CatController : MonoBehaviour
                         timeOfDrinking -= Time.deltaTime;
                         if (timeOfDrinking < 0)
                         {
-                            Destroy(HTK.getFirst());
+                            Destroy(handleTask.getFirst());
                             StatusController.setWater(100.0f);
-                            HTK.popTask();
+                            handleTask.popTask();
                             isDoingTask = false;
                         }
                     }

@@ -548,7 +548,6 @@ MonoBehaviour:
     type: 3}
   waterSource: {fileID: -927199367670048503, guid: 61c3a5e56bf3b924085b2b516509158d,
     type: 3}
-  HTK: {fileID: 785575519}
 --- !u!1001 &83718364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5385,51 +5384,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6308cb7062fac34e8e50600086b12a1, type: 3}
---- !u!1 &785575517
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 785575518}
-  - component: {fileID: 785575519}
-  m_Layer: 0
-  m_Name: HandleTask
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &785575518
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785575517}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.594103, y: -3.4910302, z: -1.2497585}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &785575519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785575517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01a45f008ff9a584ca3bfddc6b0c1311, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX: 5
-  taskQueue: []
 --- !u!1001 &831948862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14632,7 +14586,7 @@ PrefabInstance:
         type: 3}
       propertyPath: HTK
       value: 
-      objectReference: {fileID: 785575519}
+      objectReference: {fileID: 0}
     - target: {fileID: 5471644384507790966, guid: 8ee945b29a674184cae2e76bf2978b92,
         type: 3}
       propertyPath: m_Name
