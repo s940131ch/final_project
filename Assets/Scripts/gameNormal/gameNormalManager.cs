@@ -30,5 +30,10 @@ public class gameNormalManager : MonoBehaviour
     {
         SceneManager.LoadScene(scene);
     }
+    public void backMenu()
+    {
 
+
+        SceneManager.LoadScene("MainMenu");
+    }
 }

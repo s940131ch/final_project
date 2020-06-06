@@ -15,7 +15,27 @@ public class SigninMananger : MonoBehaviour
     private string text;
     public GameObject ip;
     public GameObject SQLErrorMesage;
-    string[] value;
+    public GameObject LoadingMessage;
+    float time=0.0f;
+    float angle = 0.0f;
+    bool loadingFlag = false;
+    void Update()
+    {
+
+        if (loadingFlag)
+        {
+            Debug.Log("abc");
+            time += Time.deltaTime;
+            if (time >= 0.3f)
+            {
+                time = 0.0f;
+                angle += 45.0f;
+                if (angle > 180.0f)
+                    angle = 0.0f;
+                LoadingMessage.transform.GetChild(0).GetComponent<RectTransform>().Rotate(new Vector3(0.0f, 0.0f, angle));
+            }
+        }
+    }
     public void Search()
     {
         
@@ -23,23 +43,30 @@ public class SigninMananger : MonoBehaviour
         
     }
 
-    IEnumerator DestoryMessage()
+    public void DestoryMessage()
     {
-        yield return new  WaitForSeconds(2);
         
         SQLErrorMesage.SetActive(false);
     }
+
+   
+
     IEnumerator IGetData()
     {
         string ID = id.text;
         string Pass = password.text;
         WWW www = new WWW("http://203.222.24.233:80/search.php?username=" + ID + "&password=" + Pass);
+        LoadingMessage.SetActive(true);
+        loadingFlag = true;
         yield return www;
+        loadingFlag = false;
+        LoadingMessage.SetActive(false);
 
         if (www.error != null)
         {
             SQLErrorMesage.SetActive(true);
             SQLErrorMesage.transform.GetChild(0).GetComponent<Text>().text = "伺服器關機中";
+            Invoke("DestoryMessage", 2f);
             Debug.Log(www.error);   
         }
         else
@@ -49,9 +76,7 @@ public class SigninMananger : MonoBehaviour
             {
                 sear = true;
                 text = www.text;
-                value = text.Split(',');
-
-            
+                string[] value = text.Split(',');
                 Debug.Log("hunger :" + value[0]);
                 Debug.Log("thir :" + value[1]);
                 Debug.Log("love :" + value[2]);
@@ -77,15 +102,13 @@ public class SigninMananger : MonoBehaviour
             {
                 sear = false;
                 SQLErrorMesage.SetActive(true);
-                StartCoroutine(DestoryMessage());
+                Invoke("DestoryMessage", 2f);
+                
             }
                 
         }
 
         Debug.Log(sear);
     }
-    public string[] getValue()
-    {
-        return value;
-    }
+
 }
