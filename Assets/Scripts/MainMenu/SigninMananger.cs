@@ -15,6 +15,7 @@ public class SigninMananger : MonoBehaviour
     private string text;
     public GameObject ip;
     public GameObject SQLErrorMesage;
+    string[] value;
     public void Search()
     {
         
@@ -48,7 +49,7 @@ public class SigninMananger : MonoBehaviour
             {
                 sear = true;
                 text = www.text;
-                string[] value = text.Split(',');
+                value = text.Split(',');
 
             
                 Debug.Log("hunger :" + value[0]);
@@ -82,5 +83,9 @@ public class SigninMananger : MonoBehaviour
         }
 
         Debug.Log(sear);
+    }
+    public string[] getValue()
+    {
+        return value;
     }
 }

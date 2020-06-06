@@ -52,4 +52,21 @@ public static class handleTask
 		Debug.Log(((Front + 1) % MAX) + "front + 1 % MAX");
 		return taskQueue[((Front + 1) % MAX)];
 	}
+	public static void clearQueue()
+	{
+		Front = 0;
+		Rear = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			taskQueue[i] = null;
+		}
+	}
+	public static int getFront()
+	{
+		return Front;
+	}
+	public static int getRear()
+	{
+		return Rear;
+	}
 }
