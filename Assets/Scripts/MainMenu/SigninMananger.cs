@@ -90,6 +90,8 @@ public class SigninMananger : MonoBehaviour
                 StatusController.setLove(float.Parse(value[2]));
                 StatusController.setHasPet(int.Parse(value[3]));
                 StatusController.setPetType(int.Parse(value[4]));
+                StatusController.setUsername(ID);
+                StatusController.setPassword(Pass);
                 Destroy(ip);
                 Debug.Log("hunger :" + value[0]);
                 Debug.Log("thir :" + value[1]);

@@ -11,10 +11,28 @@ public static class StatusController
     static private float love = 100.0f;
     static private int PetType = 0;
     static private int HasPet = 0;
+    static private string username;
+    static private string password;
+
     // Start is called before the first frame update
 
     // Update is called once per frame
-
+    public static void setUsername(string n)
+    {
+        username = n;
+    }
+    public static void setPassword(string n)
+    {
+        password = n;
+    }
+    public static string getUsername()
+    {
+        return username;
+    }
+    public static string getPassword()
+    {
+        return password;
+    }
     public static void setPetType(int n)
     {
         PetType = n;
