@@ -51,7 +51,7 @@ public class menuMananger : MonoBehaviour
 
     IEnumerator<WWW> UpdatePetData(string ID, string Pass, int HasPet, int PetType)
     {
-        WWW www = new WWW("http://203.222.24.233/Update.php?Username=" + ID + "&Password=" + Pass + "&HasPet=" + HasPet + "&PetType=" + PetType);
+        WWW www = new WWW("http://203.222.25.240/Update.php?Username=" + ID + "&Password=" + Pass + "&HasPet=" + HasPet + "&PetType=" + PetType);
         yield return www;
 
         if (www.error != null)

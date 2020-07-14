@@ -11,12 +11,12 @@ public class CatController : MonoBehaviour
     float timeOfHunger = 0.0f;  //飢餓度扣除時間
     float timeOfWater = 0.0f;   //口渴值扣除時間 
     float timeOfEating = 5.0f;  //吃飯時間
-    float timeOfDrinking = 3.0f;  //吃飯時間
+    float timeOfDrinking = 3.0f;//吃飯時間
+    float timeOfPlaying = 2.0f; //遊玩時間 
     float speed = 1.5f;         //走路速度
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
-
     float timeCount = 0.0f;
     GameObject temp;
     Animator am;
@@ -61,6 +61,7 @@ public class CatController : MonoBehaviour
         /*否則做Task*/
         else
         {
+        
             /*拿到第一個Task的內容*/
             if (!isDoingTask)
             {
@@ -71,11 +72,11 @@ public class CatController : MonoBehaviour
             /*看向Task*/
             Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+            timeCount = timeCount + Time.deltaTime * speed;
 
             /*如果是吃東西的任務的話*/
             if (temp.name == "bowlHasFood(Clone)" || temp.name == "bowlHasWater(Clone)")
             {
-
 
                 /*走向餐盤*/
                 if (Vector3.Distance(temp.transform.position, transform.position) >= 2.0f)
@@ -115,8 +116,17 @@ public class CatController : MonoBehaviour
                 }
 
             }
+            else if(temp.name == "toy_ball(Clone)")
+            {
+                playBall(temp);
+                if (Vector3.Distance(temp.transform.position, transform.position) <= 2.0f)
+                {
+                    Destroy(handleTask.getFirst());
+                    handleTask.popTask();
+                    isDoingTask = false;
+                }
 
-            timeCount = timeCount + Time.deltaTime * speed;
+            }
         }
 
         /*每隔5秒扣除飢餓度*/
@@ -131,7 +141,7 @@ public class CatController : MonoBehaviour
         /*每隔3秒扣除口渴值*/
         if (timeOfWater > 3.0f && StatusController.getWater() > 0.0f)
         {
-            
+            am.SetInteger("Status", 3);
             StatusController.minusWater(0.1f);
             timeOfWater = 0.0f;
         }
@@ -158,6 +168,28 @@ public class CatController : MonoBehaviour
         
         am.SetInteger("Status", 2);
         Debug.Log("正在吃飯");
+    }
+    private void playBall(GameObject newBall)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool flag = false;
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) )
+        {
+            
+            Vector3 Direction = hit.point - Camera.main.transform.position;
+            Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red, 0.1f, true);
+            Debug.Log(hit.transform.name);
+            newBall.transform.position = Camera.main.transform.position;
+            newBall.AddComponent<Rigidbody>();
+            newBall.AddComponent<SphereCollider>();
+            Rigidbody ballRd = newBall.GetComponent<Rigidbody>();
+            ballRd.AddForce(Direction * 100.0f);
+            
+        }
+        if (newBall.transform.position.y <= 0.25f)
+            walk();
+
     }
 
 }

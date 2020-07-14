@@ -52,7 +52,7 @@ public class SignupMananger : MonoBehaviour
 
     IEnumerator signup()
     {
-        WWW www = new WWW("http://203.222.24.233/Check.php?username=" + ID.text + "&password=" + Password.text);
+        WWW www = new WWW("http://203.222.25.240/Check.php?username=" + ID.text + "&password=" + Password.text);
         LoadingMessage.SetActive(true);
         loadingFlag = true;
         yield return www;

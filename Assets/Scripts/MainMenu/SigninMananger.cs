@@ -55,7 +55,7 @@ public class SigninMananger : MonoBehaviour
     {
         string ID = id.text;
         string Pass = password.text;
-        WWW www = new WWW("http://203.222.24.233:80/search.php?username=" + ID + "&password=" + Pass);
+        WWW www = new WWW("http://203.222.25.240/search.php?username=" + ID + "&password=" + Pass);
         LoadingMessage.SetActive(true);
         loadingFlag = true;
         yield return www;

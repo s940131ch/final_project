@@ -50,7 +50,7 @@ public class gameNormalManager : MonoBehaviour
     IEnumerator backMenu()
     {
 
-        WWW www = new WWW("http://203.222.24.233:80/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
+        WWW www = new WWW("http://203.222.25.240/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
         yield return www;
         Debug.Log("儲存資料成功1");
         SceneManager.LoadScene("MainMenu");
@@ -58,7 +58,7 @@ public class gameNormalManager : MonoBehaviour
     IEnumerator saveData()
     {
         
-        WWW www = new WWW("http://203.222.24.233:80/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
+        WWW www = new WWW("http://203.222.25.240/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
         yield return www;
         Debug.Log("儲存資料成功2");
     }

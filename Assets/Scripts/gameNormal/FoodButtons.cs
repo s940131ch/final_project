@@ -2,25 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class normalFeed: MonoBehaviour
+public class FoodButtons : MonoBehaviour
 {
     public GameObject foodSource;
     public GameObject waterSource;
     GameObject food = null;
     GameObject water = null;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void createFood()
     {
 
