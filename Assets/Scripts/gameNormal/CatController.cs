@@ -13,7 +13,7 @@ public class CatController : MonoBehaviour
     float timeOfEating = 5.0f;  //吃飯時間
     float timeOfDrinking = 3.0f;//吃飯時間
     float timeOfPlaying = 2.0f; //遊玩時間 
-    float speed = 1.5f;         //走路速度
+    float speed = 2.5f;         //走路速度
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
@@ -24,7 +24,7 @@ public class CatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0.0f, 0.05f, 0.0f);
+        transform.position = new Vector3(0.0f, -2.0f, 0.0f);
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
     }
@@ -35,7 +35,7 @@ public class CatController : MonoBehaviour
         /*如果沒有需要Task則隨機走路*/
         if (handleTask.isEmpty())
         {
-            
+            speed = 2.5f;    
             /*原地隨機走路*/
             timeOfDirection += Time.deltaTime;
             //Debug.Log(timeOfDirection);
@@ -124,6 +124,8 @@ public class CatController : MonoBehaviour
                     Destroy(handleTask.getFirst());
                     handleTask.popTask();
                     isDoingTask = false;
+                    am.speed = 1.0f;
+                    speed = 2.5f;
                 }
 
             }
@@ -144,6 +146,8 @@ public class CatController : MonoBehaviour
             am.SetInteger("Status", 3);
             StatusController.minusWater(0.1f);
             timeOfWater = 0.0f;
+            
+            
         }
 
 
@@ -174,9 +178,9 @@ public class CatController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         bool flag = false;
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) )
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit))
         {
-            
+
             Vector3 Direction = hit.point - Camera.main.transform.position;
             Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red, 0.1f, true);
             Debug.Log(hit.transform.name);
@@ -185,11 +189,20 @@ public class CatController : MonoBehaviour
             newBall.AddComponent<SphereCollider>();
             Rigidbody ballRd = newBall.GetComponent<Rigidbody>();
             ballRd.AddForce(Direction * 100.0f);
-            
+
         }
         if (newBall.transform.position.y <= 0.25f)
+        {
+            speed = 9.0f;
+            am.speed = 2.0f;
             walk();
+        }
 
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(handleTask.isEmpty())
+            timeOfWalking = 0.0f;
+    }
 }
