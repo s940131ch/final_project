@@ -19,6 +19,7 @@ public class SigninMananger : MonoBehaviour
     float time=0.0f;
     float angle = 0.0f;
     bool loadingFlag = false;
+    public AudioSource sound;
     void Update()
     {
 
@@ -38,7 +39,7 @@ public class SigninMananger : MonoBehaviour
     }
     public void Search()
     {
-        
+        sound.Play();
         StartCoroutine(IGetData());
         
     }

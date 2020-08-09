@@ -13,13 +13,16 @@ public class CatController : MonoBehaviour
     float timeOfEating = 5.0f;  //吃飯時間
     float timeOfDrinking = 3.0f;//吃飯時間
     float timeOfPlaying = 2.0f; //遊玩時間 
+    float timeOfSound = 0.0f;
     float speed = 2.5f;         //走路速度
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
     float timeCount = 0.0f;
+    float random = 0.0f;
     GameObject temp;
     Animator am;
+    AudioSource sound;          //貓叫聲
    
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,9 @@ public class CatController : MonoBehaviour
         transform.position = new Vector3(0.0f, -2.0f, 0.0f);
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
+        sound = GetComponent<AudioSource>();
+        sound.Play();
+        random = Random.Range(5.0f, 10.0f);
     }
 
     // Update is called once per frame
@@ -56,6 +62,16 @@ public class CatController : MonoBehaviour
                 isWalking = false;
                 isOk = false;
             }
+            timeOfSound += Time.deltaTime;
+
+            if(timeOfSound > random)
+            {
+                sound.Play();
+                random = Random.Range(5.0f, 50.0f);
+            }
+
+
+
         }
 
         /*否則做Task*/
@@ -100,6 +116,9 @@ public class CatController : MonoBehaviour
                             StatusController.setHealth(100.0f);
                             handleTask.popTask();
                             isDoingTask = false;
+                            sound.Play();
+                            timeOfSound = 0.0f;
+                            random = Random.Range(5.0f, 50.0f);
                         }
                     }
                     else if (temp.name == "bowlHasWater(Clone)")
@@ -111,6 +130,9 @@ public class CatController : MonoBehaviour
                             StatusController.setWater(100.0f);
                             handleTask.popTask();
                             isDoingTask = false;
+                            sound.Play();
+                            timeOfSound = 0.0f;
+                            random = Random.Range(5.0f, 50.0f);
                         }
                     }
                 }
@@ -205,4 +227,10 @@ public class CatController : MonoBehaviour
         if(handleTask.isEmpty())
             timeOfWalking = 0.0f;
     }
+
+    public void playSound()
+    {
+        sound.Play();
+    }
+
 }

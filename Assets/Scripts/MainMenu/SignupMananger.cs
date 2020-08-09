@@ -12,6 +12,7 @@ public class SignupMananger : MonoBehaviour
     public GameObject LoadingMessage;
     public InputField CheckPassword;
     public GameObject DoubleCheck;
+    public AudioSource sound;
     bool loadingFlag = false;
     float time = 0.0f;
     float angle = 0.0f;
@@ -34,6 +35,7 @@ public class SignupMananger : MonoBehaviour
     }
     public void Signup()
     {
+        sound.Play();
         StartCoroutine(signup());
     }
     public void Confirm()

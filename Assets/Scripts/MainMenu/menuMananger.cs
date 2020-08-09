@@ -9,6 +9,7 @@ public class menuMananger : MonoBehaviour
     public GameObject Panel;
     public InputField id;
     public InputField password;
+    public AudioSource sound;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +27,7 @@ public class menuMananger : MonoBehaviour
 
     public void onClick(string sceneName)
     {
+        sound.Play();
         if(StatusController.getHasPet() == 0)
         {
             Panel.SetActive(true);
@@ -35,6 +37,7 @@ public class menuMananger : MonoBehaviour
     }
     public void clickPet1()
     {
+        sound.Play();
         StatusController.setHasPet(1);
         StatusController.setPetType(1);
         Panel.SetActive(false);
@@ -43,6 +46,7 @@ public class menuMananger : MonoBehaviour
 
     public void clickPet2()
     {
+        sound.Play();
         StatusController.setHasPet(1);
         StatusController.setPetType(2);
         Panel.SetActive(false);
