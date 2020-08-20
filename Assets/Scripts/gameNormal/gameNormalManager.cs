@@ -9,6 +9,7 @@ public class gameNormalManager : MonoBehaviour
     public GameObject pet1;
     public GameObject pet2;
     float time = 0.0f;
+    public string server_ip = "203.222.25.154";
     // Start is called before the first frame update
     void Start()
     {
@@ -50,15 +51,16 @@ public class gameNormalManager : MonoBehaviour
     IEnumerator backMenu()
     {
 
-        WWW www = new WWW("http://203.222.25.154/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
+        WWW www = new WWW("http://" + server_ip + "/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
         yield return www;
+        
         Debug.Log("儲存資料成功1");
         SceneManager.LoadScene("MainMenu");
     }
     IEnumerator saveData()
     {
         
-        WWW www = new WWW("http://203.222.25.154/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
+        WWW www = new WWW("http://" + server_ip + "/UpdateStatus.php?Username=" + StatusController.getUsername() + "&Password=" + StatusController.getPassword() + "&Hunger=" + StatusController.getHealth() + "&Thirst=" + StatusController.getWater() + "&Love=" + StatusController.getLove());
         yield return www;
         Debug.Log("儲存資料成功2");
     }

@@ -35,6 +35,10 @@ public class menuMananger : MonoBehaviour
         else
             SceneManager.LoadScene(sceneName);
     }
+    public void onMultiplayerClick()
+    {
+        SceneManager.LoadScene("RoomSearchingScene");
+    }
     public void clickPet1()
     {
         sound.Play();
@@ -75,4 +79,6 @@ public class menuMananger : MonoBehaviour
             }
         }
     }
+
+
 }

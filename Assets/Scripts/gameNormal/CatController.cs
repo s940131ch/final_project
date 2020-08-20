@@ -30,6 +30,8 @@ public class CatController : MonoBehaviour
         transform.position = new Vector3(0.0f, -2.0f, 0.0f);
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
+
+        /*家平的傑作*/
         sound = GetComponent<AudioSource>();
         sound.Play();
         random = Random.Range(5.0f, 10.0f);
@@ -69,15 +71,11 @@ public class CatController : MonoBehaviour
                 sound.Play();
                 random = Random.Range(5.0f, 50.0f);
             }
-
-
-
         }
 
         /*否則做Task*/
         else
         {
-        
             /*拿到第一個Task的內容*/
             if (!isDoingTask)
             {
@@ -202,13 +200,15 @@ public class CatController : MonoBehaviour
         bool flag = false;
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit))
         {
-
             Vector3 Direction = hit.point - Camera.main.transform.position;
+
             Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red, 0.1f, true);
             Debug.Log(hit.transform.name);
+
             newBall.transform.position = Camera.main.transform.position;
             newBall.AddComponent<Rigidbody>();
             newBall.AddComponent<SphereCollider>();
+
             Rigidbody ballRd = newBall.GetComponent<Rigidbody>();
             ballRd.AddForce(Direction * 100.0f);
 
@@ -219,7 +219,6 @@ public class CatController : MonoBehaviour
             am.speed = 2.0f;
             walk();
         }
-
     }
 
     public void OnTriggerEnter(Collider other)
