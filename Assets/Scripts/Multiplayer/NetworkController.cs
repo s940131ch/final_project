@@ -14,8 +14,9 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
 
     public InputField roomName;
     public InputField roomSize;
-   
+    public InputField playername;
 
+    private string defaultname = "Player";
 
     TypedLobby Lobby;
 
@@ -66,35 +67,28 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
         base.OnJoinedLobby();
         connectMessage.text = "連線狀態:已連線\n"+"目前大廳:" + Lobby.Name;
     }
-    public override void OnLeftRoom()
-    {
-        base.OnLeftRoom();
-      
-    }
+ 
 
     //建立房間
     public void CreateRoom()
     {
         int size = int.Parse(roomSize.text);
-        string name = roomName.text;
-
+        string name = roomName.text; 
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)size };
         PhotonNetwork.CreateRoom(name, roomOps);
       
     }
     public void JoinRoom()
     {
-        string name = roomName.text;
-        PhotonNetwork.JoinRoom(name);
+        string roomID = roomName.text;
+        PhotonNetwork.JoinRoom(roomID);
+        
     }
    
 
     public override void OnCreatedRoom()
     {
-        base.OnCreatedRoom();
-        roomName.gameObject.SetActive(false);
-        roomSize.gameObject.SetActive(false);
-        
+        base.OnCreatedRoom();       
         Debug.Log("房間建立成功");
     }
 
@@ -105,6 +99,16 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
     {
         base.OnJoinedRoom();
         Debug.Log("已加入房間");
+
+        string playname;
+        if (playername.text.Length > 0)
+            playname = playername.text;
+        else
+            playname = defaultname;
+        PhotonNetwork.NickName = playname;
+
+        PhotonNetwork.LoadLevel("MultiPlayerScene");
+        Debug.Log(PhotonNetwork.NickName.ToString());
         Debug.Log(PhotonNetwork.CurrentRoom.ToString());
     }
     //加入房間失敗
