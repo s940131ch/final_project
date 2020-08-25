@@ -66,7 +66,11 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
         base.OnJoinedLobby();
         connectMessage.text = "連線狀態:已連線\n"+"目前大廳:" + Lobby.Name;
     }
-
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+      
+    }
 
     //建立房間
     public void CreateRoom()
@@ -78,11 +82,19 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
         PhotonNetwork.CreateRoom(name, roomOps);
       
     }
+    public void JoinRoom()
+    {
+        string name = roomName.text;
+        PhotonNetwork.JoinRoom(name);
+    }
    
 
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
+        roomName.gameObject.SetActive(false);
+        roomSize.gameObject.SetActive(false);
+        
         Debug.Log("房間建立成功");
     }
 
@@ -93,7 +105,7 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
     {
         base.OnJoinedRoom();
         Debug.Log("已加入房間");
-        Debug.Log(PhotonNetwork.CurrentRoom);
+        Debug.Log(PhotonNetwork.CurrentRoom.ToString());
     }
     //加入房間失敗
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -102,6 +114,13 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
         Debug.Log("加入房間失敗 請重試");
 
     }
+
+ 
+
+
+
+
+    /*
     public void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
@@ -112,6 +131,7 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
             ListRoom(room);
         }
     }
+
     
     private void RemoveOldRoom()
     {
@@ -121,6 +141,7 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
             Destroy(roomsPanel.GetChild(0).gameObject);
         }
     }
+
     private void ListRoom(RoomInfo room)
     {
         if (room.IsOpen && room.IsVisible)
@@ -132,6 +153,6 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
             tempButton.SetRoom();
         }
         
-    }
+    }*/
    
 }
