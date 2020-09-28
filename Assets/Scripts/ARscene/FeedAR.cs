@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class FeedAR : MonoBehaviour
 
     public GameObject food;
     public GameObject water;
-    public handleTaskAR HT;
+    
     bool hasCreateFood = false;
     // Start is called before the first frame update
     void Start()
@@ -22,8 +23,11 @@ public class FeedAR : MonoBehaviour
     }
     public void createFood()
     {
-        if(!hasCreateFood)
-            HT.pushTask(food);
+        if (!hasCreateFood)
+        { 
+            handletaskAr.pushTask(food);
+        }
+
     }
 
     public void foundFood()
@@ -31,8 +35,7 @@ public class FeedAR : MonoBehaviour
         hasCreateFood = true;
     }
     public void notFoundFood()
-    {
-        
+    {     
         hasCreateFood = false;
     }
 }

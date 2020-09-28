@@ -2,67 +2,71 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class handleTaskAR : MonoBehaviour
-{
+public static class handletaskAr
+{ 
+	static int Front = 0;
+	static int Rear = 0;
+	public static int MAX = 5;
+	public static GameObject[] taskQueue = new GameObject[MAX];
+	public static void pushTask(GameObject obj)
+	{
 
-	public int Front = 0;
-	public int Rear = 0;
-	public int MAX = 5;
-	public GameObject[] taskQueue;
-
-	void Start()
-	{
-		taskQueue = new GameObject[MAX];
-	}
-	void Update()
-	{
-		Debug.Log("Rear" + Rear);
-		Debug.Log("Front" + Front);
-	}
-	public void pushTask(GameObject obj)
-	{
-		
 		if (!isFull())
 		{
 			Rear = (Rear + 1) % MAX;
 			taskQueue[Rear] = obj;
-			
+
 		}
 		else
 		{
 			Debug.Log("Task Queue Is Full");
 		}
 	}
-	public void popTask()
+	public static void popTask()
 	{
 		if (!isEmpty())
 		{
 			taskQueue[Front] = null;
 			Front = (Front + 1) % MAX;
-			
+
 		}
 		else
 		{
 			Debug.Log("Task Queue Is Empty");
 		}
 	}
-	public bool isFull()
+	public static bool isFull()
 	{
 
 		Debug.Log("(Rear + 1) % MAX = " + (Rear + 1) % MAX);
 		return ((Rear + 1) % MAX == Front);
 	}
-	public bool isEmpty()
+	public static bool isEmpty()
 	{
-		
+
 		return Front == Rear;
 	}
 
-	public GameObject getFirst()
+	public static GameObject getFirst()
 	{
 		Debug.Log(((Front + 1) % MAX) + "front + 1 % MAX");
 		return taskQueue[((Front + 1) % MAX)];
 	}
-
-
+	public static void clearQueue()
+	{
+		Front = 0;
+		Rear = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			taskQueue[i] = null;
+		}
+	}
+	public static int getFront()
+	{
+		return Front;
+	}
+	public static int getRear()
+	{
+		return Rear;
+	}
 }

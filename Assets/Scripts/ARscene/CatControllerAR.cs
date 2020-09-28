@@ -24,7 +24,6 @@ public class CatControllerAR : MonoBehaviour
     public GameObject origin;
 
     Animator am;
-    public handleTaskAR HTK;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,12 +38,12 @@ public class CatControllerAR : MonoBehaviour
     void Update()
     {
 
-        if(!HTK.isEmpty())
+        if(!handletaskAr.isEmpty())
         {
             /*拿到第一個Task的內容*/
             if (!isDoingTask)
             {
-                temp = HTK.getFirst();
+                temp = handletaskAr.getFirst();
                 isDoingTask = true;
             }
             //Debug.Log(temp.name);
@@ -56,7 +55,9 @@ public class CatControllerAR : MonoBehaviour
             /*如果是吃東西的任務的話*/
             if (temp.name == "bowlHasFood" || temp.name == "bowlHasWater")
             {
-                if (!canEat)
+                Debug.Log(Vector3.Distance(temp.transform.position, transform.position));
+                Debug.Log(temp.name);
+                if (!canEat && Vector3.Distance(temp.transform.parent.transform.position, transform.position) >= 0.5f)
                 {
                     /*走向餐盤*/
                     walk();
@@ -68,6 +69,7 @@ public class CatControllerAR : MonoBehaviour
                 /*走到之後開始吃*/
                 else
                 {
+                    canEat = true;
                     eating();
                     
                 }
@@ -78,7 +80,7 @@ public class CatControllerAR : MonoBehaviour
         }
         else
         {
-            if (Vector3.Distance(transform.localPosition,origin.transform.localPosition) >= 0.5f)
+            if (Vector3.Distance(transform.localPosition,origin.transform.localPosition) >= 0.05f)
             {
                 Debug.Log("走回原點");
                 Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
@@ -87,6 +89,8 @@ public class CatControllerAR : MonoBehaviour
             }
             else
             {
+                transform.rotation = Quaternion.Euler(new Vector3(origin.transform.rotation.x, origin.transform.rotation.y, origin.transform.rotation.z));
+
                 am.SetInteger("Status", 0);
             }
             Debug.Log("現在沒在工作");
@@ -114,7 +118,7 @@ public class CatControllerAR : MonoBehaviour
         }
         
     }
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.name);
         if (other.name == "bowlHasFood")
@@ -122,7 +126,7 @@ public class CatControllerAR : MonoBehaviour
             Debug.Log("碰到碗盤了");
             canEat = true;
         }
-    }
+    }*/
 
     public void foundCat()
     {
@@ -132,6 +136,8 @@ public class CatControllerAR : MonoBehaviour
     public void notFountCat()
     {
         this.hasFound = false;
+        transform.rotation = Quaternion.Euler(new Vector3(origin.transform.rotation.x, origin.transform.rotation.y, origin.transform.rotation.z));
+        transform.position = new Vector3(origin.transform.position.x, origin.transform.position.y, origin.transform.position.z);
         Debug.Log("沒找到貓");
 
     }
@@ -154,6 +160,7 @@ public class CatControllerAR : MonoBehaviour
     {
 
         am.SetInteger("Status", 2);
+
         if (temp.name == "bowlHasFood")
         {
             timeOfEating -= Time.deltaTime;
@@ -161,7 +168,7 @@ public class CatControllerAR : MonoBehaviour
             {
                 Debug.Log("吃完了");
                 StatusController.setHealth(100.0f);
-                HTK.popTask();
+                handletaskAr.popTask();
                 isDoingTask = false;
                 canEat = false;
             }
@@ -173,7 +180,7 @@ public class CatControllerAR : MonoBehaviour
             {
 
                 StatusController.setWater(100.0f);
-                HTK.popTask();
+                handletaskAr.popTask();
                 isDoingTask = false;
                 canEat = false;
             }
