@@ -38,7 +38,8 @@ public class gameNormalManager : MonoBehaviour
 
     public void onClick(string scene)
     {
-        SceneManager.LoadScene(scene);
+        if(handleTask.isEmpty())
+            SceneManager.LoadScene(scene);
     }
     public void menuClick()
     {

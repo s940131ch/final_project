@@ -46,6 +46,7 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
             PhotonNetwork.ConnectUsingSettings();
             Debug.Log("連線至伺服器中");
             connectMessage.text = "連線狀態:連線中";
+            PhotonNetwork.OfflineMode = false;
         }
     }
     public override void OnConnectedToMaster()
@@ -75,12 +76,28 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
         int size = int.Parse(roomSize.text);
         string name = roomName.text; 
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)size };
+
+        string playname;
+        if (playername.text.Length > 0)
+            playname = playername.text;
+        else
+            playname = defaultname;
+        PhotonNetwork.NickName = playname;
+
         PhotonNetwork.CreateRoom(name, roomOps);
       
     }
     public void JoinRoom()
     {
         string roomID = roomName.text;
+
+        string playname;
+        if (playername.text.Length > 0)
+            playname = playername.text;
+        else
+            playname = defaultname;
+        PhotonNetwork.NickName = playname;
+
         PhotonNetwork.JoinRoom(roomID);
         
     }
@@ -88,7 +105,10 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
 
     public override void OnCreatedRoom()
     {
-        base.OnCreatedRoom();       
+        base.OnCreatedRoom();
+
+        
+
         Debug.Log("房間建立成功");
     }
 
@@ -99,17 +119,10 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
     {
         base.OnJoinedRoom();
         Debug.Log("已加入房間");
-
-        string playname;
-        if (playername.text.Length > 0)
-            playname = playername.text;
-        else
-            playname = defaultname;
-        PhotonNetwork.NickName = playname;
-
         PhotonNetwork.LoadLevel("MultiPlayerScene");
         Debug.Log(PhotonNetwork.NickName.ToString());
         Debug.Log(PhotonNetwork.CurrentRoom.ToString());
+
     }
     //加入房間失敗
     public override void OnJoinRoomFailed(short returnCode, string message)

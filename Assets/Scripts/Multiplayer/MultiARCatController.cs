@@ -1,11 +1,11 @@
-﻿using Photon.Pun.UtilityScripts;
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CatControllerAR : MonoBehaviour
-{
 
+public class MultiARCatController : MonoBehaviourPun
+{
     float direction = 0.0f;     //朝向前方
     float timeOfDirection = 0;  //要轉換方向的時間
     float timeOfWalking = 0;    //走的時間
@@ -24,15 +24,15 @@ public class CatControllerAR : MonoBehaviour
 
     GameObject temp;
     public GameObject origin;
-   
+
     Animator am;
     // Start is called before the first frame update
     void Start()
     {
-        
+        //初始動畫
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
-        
+
 
 
     }
@@ -40,74 +40,73 @@ public class CatControllerAR : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (!handletaskAr.isEmpty())
+        //{
+        //    /*拿到第一個Task的內容*/
+        //    if (!isDoingTask)
+        //    {
+        //        temp = handletaskAr.getFirst();
+        //        isDoingTask = true;
+        //    }
+        //    //Debug.Log(temp.name);
 
-        if(!handletaskAr.isEmpty())
-        {
-            /*拿到第一個Task的內容*/
-            if (!isDoingTask)
-            {
-                temp = handletaskAr.getFirst();
-                isDoingTask = true;
-            }
-            //Debug.Log(temp.name);
+        //    /*看向Task*/
 
-            /*看向Task*/
+        //    Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
 
-            Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+        //    /*如果是吃東西的任務的話*/
+        //    if (temp.name == "bowlHasFood" || temp.name == "bowlHasWater")
+        //    {
+        //        Debug.Log(Vector3.Distance(temp.transform.position, transform.position));
+        //        Debug.Log(temp.name);
+        //        if (!canEat && Vector3.Distance(temp.transform.parent.transform.position, transform.position) >= 0.5f)
+        //        {
+        //            /*走向餐盤*/
+        //            walk();
+        //            if (temp.name == "bowlHasFood")
+        //                timeOfEating = 3.0f;
+        //            else if (temp.name == "bowlHasWater")
+        //                timeOfDrinking = 5.0f;
+        //        }
+        //        /*走到之後開始吃*/
+        //        else
+        //        {
+        //            canEat = true;
+        //            eating();
 
-            /*如果是吃東西的任務的話*/
-            if (temp.name == "bowlHasFood" || temp.name == "bowlHasWater")
-            {
-                Debug.Log(Vector3.Distance(temp.transform.position, transform.position));
-                Debug.Log(temp.name);
-                if (!canEat && Vector3.Distance(temp.transform.parent.transform.position, transform.position) >= 0.5f)
-                {
-                    /*走向餐盤*/
-                    walk();
-                    if (temp.name == "bowlHasFood")
-                        timeOfEating = 3.0f;
-                    else if (temp.name == "bowlHasWater")
-                        timeOfDrinking = 5.0f;
-                }
-                /*走到之後開始吃*/
-                else
-                {
-                    canEat = true;
-                    eating();
-                    
-                }
+        //        }
 
-            }
+        //    }
 
-            timeCount = timeCount + Time.deltaTime * speed;
-        }
-        else
-        {
-            if (Vector3.Distance(transform.localPosition,origin.transform.localPosition) >= 0.05f)
-            {
-                Debug.Log("走回原點");
-                Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
-                walk();
-                backOrigin = false;
-            }
-            else
-            {
-                /*走到原點轉正*/
-                if (backOrigin)
-                {
-                    transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -180.0f, 0.0f));
-                    backOrigin = false;
-                }
-                am.SetInteger("Status", 0);
-            }
-            Debug.Log("現在沒在工作");
-        }
+        //    timeCount = timeCount + Time.deltaTime * speed;
+        //}
+        //else
+        //{
+            //if (Vector3.Distance(transform.localPosition, origin.transform.localPosition) >= 0.05f)
+            //{
+            //    Debug.Log("走回原點");
+            //    Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
+            //    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+            //    walk();
+            //    backOrigin = false;
+            //}
+            //else
+            //{
+            //    /*走到原點轉正*/
+            //    if (backOrigin)
+            //    {
+            //        transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -180.0f, 0.0f));
+            //        backOrigin = false;
+            //    }
+            //    am.SetInteger("Status", 0);
+            //}
+            //Debug.Log("現在沒在工作");
+        //}
 
         /*有貓之後每隔5秒扣除飢餓度*/
         if (hasFound)
-        {        
+        {
             timeOfHunger += Time.deltaTime;
             timeOfWater += Time.deltaTime;
             if (timeOfHunger > 5.0f && StatusController.getHealth() > 0.0f)
@@ -126,7 +125,7 @@ public class CatControllerAR : MonoBehaviour
                 timeOfWater = 0.0f;
             }
         }
-        
+
     }
     /*private void OnTriggerEnter(Collider other)
     {
@@ -157,7 +156,7 @@ public class CatControllerAR : MonoBehaviour
         transform.eulerAngles = new Vector3(0.0f, direction, 0.0f);
         timeOfWalking = Random.Range(1.0f, 6.0f);
         isOk = true;
-       // Debug.Log("決定方向了");
+        // Debug.Log("決定方向了");
     }
     private void walk()
     {
@@ -197,5 +196,4 @@ public class CatControllerAR : MonoBehaviour
         }
         //Debug.Log("正在吃飯");
     }
-
 }

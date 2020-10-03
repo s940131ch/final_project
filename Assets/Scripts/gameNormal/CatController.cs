@@ -191,7 +191,7 @@ public class CatController : MonoBehaviour
     {
         
         am.SetInteger("Status", 2);
-        Debug.Log("正在吃飯");
+        //Debug.Log("正在吃飯");
     }
     private void playBall(GameObject newBall)
     {
