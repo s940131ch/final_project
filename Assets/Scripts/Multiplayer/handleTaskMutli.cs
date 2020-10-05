@@ -29,9 +29,8 @@ public class handleTaskMutli : MonoBehaviourPun
 	{
 		if (!isEmpty())
 		{
-			taskQueue[Front] = null;
 			Front = (Front + 1) % MAX;
-
+			PhotonNetwork.Destroy(taskQueue[Front]);
 		}
 		else
 		{

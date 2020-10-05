@@ -90,7 +90,7 @@ public class CatControllerAR : MonoBehaviour
                 Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                 walk();
-                backOrigin = false;
+                backOrigin = true;
             }
             else
             {

@@ -13,18 +13,26 @@ public class GameManager : MonoBehaviourPun
     [SerializeField]
     private GameObject catTarget;
     [SerializeField]
-    private GameObject Food;
+    private GameObject foodTarget;
+    [SerializeField]
+    private GameObject foodPrefab;
 
-    private GameObject temp;
+    private GameObject tempCat;
+    private GameObject tempFood;
     PhotonView PV;
 
     public Text roundPlayer;
     public Text RPCMessage;
+
+    bool isFoundTarget = false;
+    handleTaskMutli tasks;
+
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(PhotonNetwork.MasterClient.NickName);   
+        Debug.Log(PhotonNetwork.MasterClient.NickName);
         //PhotonNetwork.Instantiate(this.Food.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        tasks = GameObject.Find("TaskQueue").GetComponent<handleTaskMutli>();
     }
 
     // Update is called once per frame
@@ -32,35 +40,63 @@ public class GameManager : MonoBehaviourPun
     {
         roundPlayer.text = "現在是" + PhotonNetwork.MasterClient.NickName + "的回合";
         Player[] list = PhotonNetwork.PlayerList;
-        Debug.Log(PhotonNetwork.MasterClient.NickName);
-        foreach(Player x in list)
-        {
-            Debug.Log(x.NickName + "//");
-        }
+ 
+   
     }
 
     public void foundCat()
     {
-        temp = Instantiate<GameObject>(catPrefab);
-        temp.transform.parent = catTarget.transform;
-        temp.transform.localPosition = new Vector3(0f, 0f, 0f);
+        tempCat = Instantiate<GameObject>(catPrefab);
+        tempCat.transform.parent = catTarget.transform;
+        tempCat.transform.localPosition = new Vector3(0f, 0f, 0f);
         Debug.Log("找到貓了");
         
     }
     public void notFountCat()
     {
-        Destroy(temp);
-
-        
+        Destroy(tempCat);
         Debug.Log("沒找到貓");
 
     }
+
+    public void FoundFood()
+    {
+        /*該玩家回合才可以做事情*/
+        if(PhotonNetwork.IsMasterClient)
+        {
+            tempFood = PhotonNetwork.Instantiate(foodPrefab.name, new Vector3(0, 0, 0), Quaternion.identity);
+            tempFood.name = "bowlHasFood";
+            tempFood.transform.parent = foodTarget.transform;
+            tempFood.transform.localPosition = new Vector3(0, 0, 0);
+            tempFood.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+            tempFood.transform.parent = foodTarget.transform.parent.transform;
+            photonView.RPC("MasterFoundFood", RpcTarget.Others, tempFood.transform.localPosition);
+            tempFood.transform.parent = foodTarget.transform;
+            tasks.pushTask(tempFood);
+        }
+        
+    }
+    [PunRPC]
+    public void MasterFoundFood(Vector3 t)
+    {
+        Debug.Log(t);
+        Debug.Log("收到訊息");
+        GameObject temp = GameObject.Find("bowlHasFood(Clone)");
+        GameObject worldCoor = GameObject.Find("WorldCoor");
+        if (temp != null)
+            Debug.Log(temp + "不為空");
+        temp.transform.parent = worldCoor.transform;
+        temp.transform.localPosition = t;
+        //tasks.pushTask(tempFood);
+    }
+
+
 
     public void changeMaster()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-
             photonView.RPC("changeMasterRPC", RpcTarget.Others);
         }
     }
@@ -81,6 +117,7 @@ public class GameManager : MonoBehaviourPun
         PhotonNetwork.SetMasterClient(playerList[i]);
     }
 
-    
+  
+
 
 }
