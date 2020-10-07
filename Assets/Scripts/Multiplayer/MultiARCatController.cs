@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class MultiARCatController : MonoBehaviourPun
@@ -26,107 +27,91 @@ public class MultiARCatController : MonoBehaviourPun
     public Transform origin;
 
     handleTaskMutli tasks;
-    
+
+    PhotonView PV;
 
     Animator am;
+
+    Text viewID;
     // Start is called before the first frame update
     void Start()
     {
         //初始動畫
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
-        origin = gameObject.transform.parent.GetChild(0).transform;
-        Debug.Log(origin.name);
+        
         tasks = GameObject.Find("TaskQueue").GetComponent<handleTaskMutli>();
 
-
+        PV = GetComponent<PhotonView>();
+        viewID =  GameObject.Find("ViewID").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!tasks.isEmpty())
+        viewID.text = PV.ViewID.ToString();
+        if (PhotonNetwork.IsMasterClient)
         {
-            /*拿到第一個Task的內容*/
-            if (!isDoingTask)
+            if (!tasks.isEmpty())
             {
-                temp = tasks.getFirst();
-                isDoingTask = true;
-            }
-            //Debug.Log(temp.name);
-
-            /*看向Task*/
-
-            Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
-
-            /*如果是吃東西的任務的話*/
-            if (temp.name == "bowlHasFood" || temp.name == "bowlHasWater")
-            {
-                if (!canEat && Vector3.Distance(temp.transform.position, transform.position) >= 0.5f)
+                /*拿到第一個Task的內容*/
+                if (!isDoingTask)
                 {
-                    /*走向餐盤*/
-                    walk();
-                    if (temp.name == "bowlHasFood")
-                        timeOfEating = 3.0f;
-                    else if (temp.name == "bowlHasWater")
-                        timeOfDrinking = 5.0f;
+                    temp = tasks.getFirst();
+                    isDoingTask = true;
                 }
-                /*走到之後開始吃*/
-                else
-                {
-                    canEat = true;
-                    eating();
-                }
+                //Debug.Log(temp.name);
 
-            }
+                /*看向Task*/
 
-            timeCount = timeCount + Time.deltaTime * speed;
-        }
-        else
-        {
-            
-            if (Vector3.Distance(transform.position, origin.transform.position) >= 0.05f)
-            {
-                Debug.Log("走回原點");
-                Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
+                Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
-                walk();
-                backOrigin = true;
+
+                /*如果是吃東西的任務的話*/
+                if (temp.name == "bowlHasFood" || temp.name == "bowlHasWater")
+                {
+                    if (!canEat && Vector3.Distance(temp.transform.position, transform.position) >= 0.5f)
+                    {
+                        /*走向餐盤*/
+                        walk();
+                        if (temp.name == "bowlHasFood")
+                            timeOfEating = 3.0f;
+                        else if (temp.name == "bowlHasWater")
+                            timeOfDrinking = 5.0f;
+                    }
+                    /*走到之後開始吃*/
+                    else
+                    {
+                        canEat = true;
+                        eating();
+                    }
+
+                }
+
+                timeCount = timeCount + Time.deltaTime * speed;
             }
             else
             {
-                /*走到原點轉正*/
-                if (backOrigin)
+                if (Vector3.Distance(transform.position, origin.transform.position) >= 0.05f)
                 {
-                    Debug.Log("轉正轉正了");
-                    transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -180.0f, 0.0f));
-                    backOrigin = false;
+                    Debug.Log("走回原點");
+                    Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+                    walk();
+                    backOrigin = true;
                 }
-                am.SetInteger("Status", 0);
-            }
-            //Debug.Log("現在沒在工作");
-        }
-
-        /*有貓之後每隔5秒扣除飢餓度*/
-        if (hasFound)
-        {
-            timeOfHunger += Time.deltaTime;
-            timeOfWater += Time.deltaTime;
-            if (timeOfHunger > 5.0f && StatusController.getHealth() > 0.0f)
-            {
-                Debug.Log("扣除飢餓值");
-                StatusController.minusHealth(0.5f);
-                timeOfHunger = 0.0f;
-            }
-
-            /*每隔3秒扣除口渴值*/
-            if (timeOfWater > 3.0f && StatusController.getWater() > 0.0f)
-            {
-                Debug.Log("扣除口渴值");
-                float waterTemp = StatusController.getWater();
-                StatusController.minusWater(0.5f);
-                timeOfWater = 0.0f;
+                else
+                {
+                    /*走到原點轉正*/
+                    if (backOrigin)
+                    {
+                        Debug.Log("轉正轉正了");
+                        transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -180.0f, 0.0f));
+                        backOrigin = false;
+                    }
+                    am.SetInteger("Status", 0);
+                }
+                //Debug.Log("現在沒在工作");
             }
         }
 
@@ -165,7 +150,7 @@ public class MultiARCatController : MonoBehaviourPun
     private void walk()
     {
         am.SetInteger("Status", 1);
-        transform.localPosition += transform.forward * Time.deltaTime * speed;
+        transform.position += transform.forward * Time.deltaTime * speed;
 
         //Debug.Log("正在走路");
     }

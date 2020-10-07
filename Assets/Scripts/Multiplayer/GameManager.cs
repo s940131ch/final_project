@@ -46,15 +46,12 @@ public class GameManager : MonoBehaviourPun
 
     public void foundCat()
     {
-        tempCat = Instantiate<GameObject>(catPrefab);
-        tempCat.transform.parent = catTarget.transform;
-        tempCat.transform.localPosition = new Vector3(0f, 0f, 0f);
+        catPrefab.SetActive(true);
         Debug.Log("找到貓了");
-        
     }
     public void notFountCat()
     {
-        Destroy(tempCat);
+        catPrefab.SetActive(false);
         Debug.Log("沒找到貓");
 
     }
@@ -68,11 +65,9 @@ public class GameManager : MonoBehaviourPun
             tempFood.name = "bowlHasFood";
             tempFood.transform.parent = foodTarget.transform;
             tempFood.transform.localPosition = new Vector3(0, 0, 0);
-            tempFood.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            tempFood.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));       
 
-            tempFood.transform.parent = foodTarget.transform.parent.transform;
-            photonView.RPC("MasterFoundFood", RpcTarget.Others, tempFood.transform.localPosition);
-            tempFood.transform.parent = foodTarget.transform;
+            photonView.RPC("MasterFoundFood", RpcTarget.Others, foodTarget.transform.position);
             tasks.pushTask(tempFood);
         }
         
@@ -83,11 +78,10 @@ public class GameManager : MonoBehaviourPun
         Debug.Log(t);
         Debug.Log("收到訊息");
         GameObject temp = GameObject.Find("bowlHasFood(Clone)");
-        GameObject worldCoor = GameObject.Find("WorldCoor");
         if (temp != null)
             Debug.Log(temp + "不為空");
-        temp.transform.parent = worldCoor.transform;
-        temp.transform.localPosition = t;
+        temp.transform.position = t;
+        Debug.Log("食物的位置" + temp.transform.position );
         //tasks.pushTask(tempFood);
     }
 

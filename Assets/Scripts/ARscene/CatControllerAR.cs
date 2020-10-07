@@ -84,7 +84,7 @@ public class CatControllerAR : MonoBehaviour
         }
         else
         {
-            if (Vector3.Distance(transform.localPosition,origin.transform.localPosition) >= 0.05f)
+            if (Vector3.Distance(transform.position,origin.transform.position) >= 0.05f)
             {
                 Debug.Log("走回原點");
                 Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
