@@ -18,9 +18,12 @@ public class CatController : MonoBehaviour
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
+    bool ballFlag = true;
+    bool playBallFlag = true;
     float timeCount = 0.0f;
     float random = 0.0f;
     GameObject temp;
+    GameObject waitForDestoryObj;
     Animator am;
     AudioSource sound;          //貓叫聲
    
@@ -83,15 +86,15 @@ public class CatController : MonoBehaviour
                 isDoingTask = true;
             }
 
-            /*看向Task*/
-            Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
-            timeCount = timeCount + Time.deltaTime * speed;
+            
 
             /*如果是吃東西的任務的話*/
             if (temp.name == "bowlHasFood(Clone)" || temp.name == "bowlHasWater(Clone)")
             {
-
+                /*看向Task*/
+                Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+                timeCount = timeCount + Time.deltaTime * speed;
                 /*走向餐盤*/
                 if (Vector3.Distance(temp.transform.position, transform.position) >= 2.0f)
                 {
@@ -138,14 +141,41 @@ public class CatController : MonoBehaviour
             }
             else if(temp.name == "toy_ball(Clone)")
             {
-                playBall(temp);
-                if (Vector3.Distance(temp.transform.position, transform.position) <= 2.0f)
+                am.SetInteger("Status", 3);
+                
+                /*看向Task*/
+                if (ballFlag)
                 {
+                    Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+                    timeCount = timeCount + Time.deltaTime * speed;
+
+                }
+                playBall(temp);
+                if (Vector3.Distance(temp.transform.position, transform.position) <= 2.0f || temp.transform.position.y <= -2.0f)
+                {
+                    ballFlag = false;
+                    temp.transform.parent = gameObject.transform;
+                    temp.transform.localPosition = new Vector3(0, 0.35f, 0.6f);
+                    if(!ballFlag)
+                    {
+                        Quaternion A = Quaternion.LookRotation(new Vector3(0.0f, -2.0f, 0.0f) - transform.position);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, A, timeCount);
+                        timeCount = timeCount + Time.deltaTime * speed;
+                    }
+                    walk();
+                }
+                if(Vector3.Distance(new Vector3(0.0f, -2.0f, 0.0f), transform.position) <= 2.0f && !ballFlag)
+                {
+                    ballFlag = true;
+                    playBallFlag = true;
                     Destroy(handleTask.getFirst());
                     handleTask.popTask();
                     isDoingTask = false;
                     am.speed = 1.0f;
                     speed = 2.5f;
+                    print("到了");
+                    
                 }
 
             }
@@ -163,11 +193,9 @@ public class CatController : MonoBehaviour
         /*每隔3秒扣除口渴值*/
         if (timeOfWater > 3.0f && StatusController.getWater() > 0.0f)
         {
-            am.SetInteger("Status", 3);
+            
             StatusController.minusWater(0.1f);
             timeOfWater = 0.0f;
-            
-            
         }
 
 
@@ -198,7 +226,7 @@ public class CatController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         bool flag = false;
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit))
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && playBallFlag) 
         {
             Vector3 Direction = hit.point - Camera.main.transform.position;
 
@@ -211,7 +239,7 @@ public class CatController : MonoBehaviour
 
             Rigidbody ballRd = newBall.GetComponent<Rigidbody>();
             ballRd.AddForce(Direction * 100.0f);
-
+            playBallFlag = false;
         }
         if (newBall.transform.position.y <= 0.25f)
         {
@@ -219,6 +247,7 @@ public class CatController : MonoBehaviour
             am.speed = 2.0f;
             walk();
         }
+       
     }
 
     public void OnTriggerEnter(Collider other)
@@ -231,5 +260,5 @@ public class CatController : MonoBehaviour
     {
         sound.Play();
     }
-
+  
 }

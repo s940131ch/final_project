@@ -14,7 +14,6 @@ public class ToyButtons : MonoBehaviour
         {
             ball = Instantiate<GameObject>(ballSource);
             ball.GetComponent<Transform>().position = Camera.main.transform.position;
-
             handleTask.pushTask(ball);
         }
     }
