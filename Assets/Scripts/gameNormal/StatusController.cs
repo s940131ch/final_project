@@ -83,4 +83,9 @@ public static class StatusController
     {
         water -= n;
     }
+
+    public static void minusLove(float n)
+    {
+        love -= n;
+    }
 }

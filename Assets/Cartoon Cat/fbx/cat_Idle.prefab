@@ -1426,10 +1426,6 @@ GameObject:
   - component: {fileID: 5471644384508156438}
   - component: {fileID: 5471644384498316766}
   - component: {fileID: 5471644384507756733}
-  - component: {fileID: 5471644384507756732}
-  - component: {fileID: 5471644384507756722}
-  - component: {fileID: 5471644384507756723}
-  - component: {fileID: 5471644384507756720}
   - component: {fileID: 5471644384507756721}
   - component: {fileID: -3512561668073742851}
   m_Layer: 0
@@ -1490,62 +1486,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &5471644384507756732
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5471644384507790966}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.05812559
-  m_Height: 0.2531786
-  m_Direction: 1
-  m_Center: {x: -0.1, y: 0.127, z: -0.25}
---- !u!136 &5471644384507756722
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5471644384507790966}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.05812559
-  m_Height: 0.2531786
-  m_Direction: 1
-  m_Center: {x: 0.1, y: 0.127, z: -0.25}
---- !u!136 &5471644384507756723
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5471644384507790966}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.05812559
-  m_Height: 0.2531786
-  m_Direction: 1
-  m_Center: {x: -0.1, y: 0.127, z: 0.2}
---- !u!136 &5471644384507756720
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5471644384507790966}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.058125585
-  m_Height: 0.2531786
-  m_Direction: 1
-  m_Center: {x: 0.1, y: 0.127, z: 0.20000002}
 --- !u!114 &5471644384507756721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,6 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8085b89e4f379548afeff51d6c3edc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
 --- !u!82 &-3512561668073742851
 AudioSource:
   m_ObjectHideFlags: 0
