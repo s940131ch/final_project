@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 using Vuforia;
 
 public class CatController : MonoBehaviour
@@ -15,9 +16,10 @@ public class CatController : MonoBehaviour
     float timeOfEating = 5.0f;  //吃飯時間
     float timeOfPoo = 0.0f;    //大便任務觸發時間
     float timeOfDrinking = 3.0f;//吃飯時間
-    float timeOfPlaying = 2.0f; //遊玩時間 
+    float timeOfPlaying = 5.0f; //遊玩時間 
 
     float timeOfDoingPoo = 3.0f; //大便過程
+    
     float timeOfSound = 0.0f;
     float speed = 2.5f;         //走路速度
     bool isOk = false;          //是否決定好方向?
@@ -35,7 +37,8 @@ public class CatController : MonoBehaviour
     public GameObject PooSource;
     Animator am;
     AudioSource sound;          //貓叫聲
-   
+
+    public Canvas cv;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +50,7 @@ public class CatController : MonoBehaviour
         sound = GetComponent<AudioSource>();
         sound.Play();
         random = Random.Range(5.0f, 10.0f);
+
     }
 
     // Update is called once per frame
@@ -122,6 +126,7 @@ public class CatController : MonoBehaviour
                         timeOfEating -= Time.deltaTime;
                         if (timeOfEating < 0)
                         {
+                            cv.GetComponent<CanvasContorl>().ImageGenerate(1);
                             Destroy(handleTask.getFirst());
                             StatusController.setHealth(100.0f);
                             handleTask.popTask();
@@ -136,6 +141,8 @@ public class CatController : MonoBehaviour
                         timeOfDrinking -= Time.deltaTime;
                         if (timeOfDrinking < 0)
                         {
+                            cv.GetComponent<CanvasContorl>().ImageGenerate(3);
+
                             Destroy(handleTask.getFirst());
                             StatusController.setWater(100.0f);
                             handleTask.popTask();
@@ -185,7 +192,7 @@ public class CatController : MonoBehaviour
                     am.speed = 1.0f;
                     speed = 2.5f;
                     print("到了");
-
+                    cv.GetComponent<CanvasContorl>().ImageGenerate(2);
                     StatusController.setLove(StatusController.getLove() + 0.1f);
                     
                 }
@@ -200,19 +207,19 @@ public class CatController : MonoBehaviour
 
                 if (Vector3.Distance(temp.transform.position, transform.position) > 0.5f)
                 {
+                    
                     speed = 9.0f;
-                    am.speed = 2.0f;
+                    am.speed = 1.5f;
                     walk();
                 }
                 else
                 {
-                    
-                    
                     am.SetInteger("Status", 4);
                     if (!generatePoo)
                     {
                         a = Instantiate<GameObject>(PooSource);
                         a.transform.position = transform.position;
+                        cv.GetComponent<CanvasContorl>().ImageGenerate(4);
                         generatePoo = true;
                     }
                     timeOfDoingPoo -= Time.deltaTime;
@@ -229,6 +236,39 @@ public class CatController : MonoBehaviour
                     }
                 }
             }
+            else if (temp.name == "toy_scratch(Clone)")
+            {
+                Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+                timeCount = timeCount + Time.deltaTime * speed;
+
+                if (Vector3.Distance(temp.transform.position, transform.position) > 2.0f)
+                {
+
+                    
+                    speed = 9.0f;
+                    am.speed = 1.5f;
+                    walk();
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, 140.0f, transform.rotation.z));
+                    am.SetInteger("Status", 4);
+                    timeOfPlaying -= Time.deltaTime;
+                    if (timeOfPlaying <= 0.0f)
+                    {
+                        cv.GetComponent<CanvasContorl>().ImageGenerate(2);
+                        Destroy(handleTask.getFirst());
+                        isDoingTask = false;
+                        am.speed = 1.0f;
+                        speed = 2.5f;
+                        timeOfPlaying = 5.0f;
+                        handleTask.popTask();
+                        StatusController.setLove(StatusController.getLove() + 0.1f);
+                    }
+                }
+            }
+
         }
 
         /*每隔5秒扣除飢餓度*/
