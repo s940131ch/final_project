@@ -28,6 +28,7 @@ public class CatController : MonoBehaviour
     bool ballFlag = true;
     bool playBallFlag = true;
     bool generatePoo = false;
+    bool createOri = false;
     float timeCount = 0.0f;
     float random = 0.0f;
 
@@ -39,6 +40,8 @@ public class CatController : MonoBehaviour
     AudioSource sound;          //貓叫聲
 
     public Canvas cv;
+
+    Vector3 ori;
     // Start is called before the first frame update
     void Start()
     {
@@ -71,6 +74,7 @@ public class CatController : MonoBehaviour
             if (isOk && timeOfWalking > 0)
             {
                 walk();
+                transform.position = new Vector3(transform.position.x, -2.0f, transform.position.z);
                 timeOfDirection = 0.0f;
                 timeOfWalking -= Time.deltaTime;
             }
@@ -165,7 +169,7 @@ public class CatController : MonoBehaviour
                     Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                     timeCount = timeCount + Time.deltaTime * speed;
-
+                    
                 }
                 playBall(temp);
                 if (Vector3.Distance(temp.transform.position, transform.position) <= 2.0f || temp.transform.position.y <= -2.0f)
@@ -182,7 +186,7 @@ public class CatController : MonoBehaviour
                     }
                     walk();
                 }
-                if(Vector3.Distance(new Vector3(0.0f, -2.0f, 0.0f), transform.position) <= 2.0f && !ballFlag)
+                if ((Vector3.Distance(new Vector3(0.0f, -2.0f, 0.0f), transform.position) <= 2.0f && !ballFlag) || temp.transform.position.y < -10.0f)
                 {
                     ballFlag = true;
                     playBallFlag = true;
@@ -219,7 +223,7 @@ public class CatController : MonoBehaviour
                     {
                         a = Instantiate<GameObject>(PooSource);
                         a.transform.position = transform.position;
-                        cv.GetComponent<CanvasContorl>().ImageGenerate(4);
+                        cv.GetComponent<CanvasContorl>().ImageGenerate(4); 
                         generatePoo = true;
                     }
                     timeOfDoingPoo -= Time.deltaTime;
@@ -242,10 +246,9 @@ public class CatController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                 timeCount = timeCount + Time.deltaTime * speed;
 
+
                 if (Vector3.Distance(temp.transform.position, transform.position) > 2.0f)
                 {
-
-                    
                     speed = 9.0f;
                     am.speed = 1.5f;
                     walk();
@@ -267,6 +270,74 @@ public class CatController : MonoBehaviour
                         StatusController.setLove(StatusController.getLove() + 0.1f);
                     }
                 }
+            }
+
+            else if (temp.name == "jumpTask1" || temp.name == "jumpTask2")
+            {
+                
+                print("跳跳跳" + temp.name);
+                /*看像task*/
+                
+                
+                /*先走到該跳的位置*/
+                if(temp.name == "jumpTask1")
+                {
+                    Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+                    timeCount = timeCount + Time.deltaTime * speed;
+
+                    print("跳1");
+                    if (Vector3.Distance(temp.transform.position, transform.position) > 2.0f)
+                    {
+                        speed = 9.0f;
+                        am.speed = 1.5f;
+                        walk();
+                    }
+                    else
+                    {
+                        isDoingTask = false;
+                        am.speed = 1.0f;
+                        speed = 2.5f;
+                        if (!createOri)
+                        {
+                            ori = temp.transform.position;
+                            createOri = true;
+                        }
+                        Destroy(handleTask.getFirst());
+                        handleTask.popTask();
+                    }
+                }
+                else if(temp.name == "jumpTask2")
+                {
+
+                    if (Vector3.Distance(temp.transform.position, transform.position) > 0.05f)
+                    {
+                        print("跳躍中");
+                        Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
+                        timeCount = timeCount + Time.deltaTime * speed;
+                        speed = 9.0f;
+                        am.SetInteger("Status", 3);
+                        transform.position += transform.forward * Time.deltaTime * speed;
+                    }
+                    else
+                    {
+                        print("跳到了");
+                        transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
+                        temp.transform.position = ori;
+                        
+                        if (!createOri)
+                        {
+                            isDoingTask = false;
+                            Destroy(handleTask.getFirst());
+                            handleTask.popTask();
+                            GameObject a = GameObject.Find("toy_jump(Clone)");
+                            Destroy(a);
+                        }
+                        createOri = false;
+                    }
+                }
+                
             }
 
         }
@@ -332,6 +403,7 @@ public class CatController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         bool flag = false;
+        
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && playBallFlag) 
         {
             Vector3 Direction = hit.point - Camera.main.transform.position;
@@ -341,7 +413,10 @@ public class CatController : MonoBehaviour
 
             newBall.transform.position = Camera.main.transform.position;
             newBall.AddComponent<Rigidbody>();
-            newBall.AddComponent<SphereCollider>();
+            if (newBall.name == "toy_ball(Clone)")
+                newBall.AddComponent<SphereCollider>();
+            else
+                newBall.AddComponent<BoxCollider>();
 
             Rigidbody ballRd = newBall.GetComponent<Rigidbody>();
             ballRd.AddForce(Direction * 100.0f);
