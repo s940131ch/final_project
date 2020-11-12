@@ -11,14 +11,14 @@ public class UIImageContorl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.transform.LookAt(Camera.main.transform);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
-
+        this.transform.LookAt(Camera.main.transform);
         this.GetComponent<Image>().color = new Color(255, 255, 255, 1 - (timer / 5));
         Destroy(gameObject, time);
     }

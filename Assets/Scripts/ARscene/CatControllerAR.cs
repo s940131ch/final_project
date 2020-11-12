@@ -32,8 +32,6 @@ public class CatControllerAR : MonoBehaviour
         
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
-        
-
 
     }
 

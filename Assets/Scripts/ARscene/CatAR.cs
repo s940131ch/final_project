@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using Vuforia;
-
-public class CatController : MonoBehaviour
+public class CatAR : MonoBehaviour
 {
-
     float direction = 0.0f;     //朝向前方
     float timeOfDirection = 0;  //要轉換方向的時間
     float timeOfWalking = 0;    //走的時間
@@ -27,7 +24,7 @@ public class CatController : MonoBehaviour
     bool ballFlag = true;
     bool playBallFlag = true;
     bool generatePoo = false;
-    
+    bool backOrigin = true;
     float timeCount = 0.0f;
     float random = 0.0f;
 
@@ -39,12 +36,11 @@ public class CatController : MonoBehaviour
     AudioSource sound;          //貓叫聲
 
     public Canvas cv;
-
+    public GameObject origin;
     Vector3 ori;
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0.0f, -2.0f, 0.0f);
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
 
@@ -59,33 +55,31 @@ public class CatController : MonoBehaviour
     void Update()
     {
         /*如果沒有需要Task則隨機走路*/
-        if (handleTask.isEmpty())
+        if (handletaskAr.isEmpty())
         {
-            speed = 2.5f;    
-            /*原地隨機走路*/
-            timeOfDirection += Time.deltaTime;
-            //Debug.Log(timeOfDirection);
-            if (!isWalking && timeOfDirection >= 3.0f)
+            if (Vector3.Distance(transform.position, origin.transform.position) >= 0.05f)
             {
-                decideDirection();
-                isWalking = true;
-            }
-            if (isOk && timeOfWalking > 0)
-            {
+                Debug.Log("走回原點");
+                Quaternion lookOnLook = Quaternion.LookRotation(origin.transform.position - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                 walk();
-                transform.position = new Vector3(transform.position.x, -2.0f, transform.position.z);
-                timeOfDirection = 0.0f;
-                timeOfWalking -= Time.deltaTime;
+                backOrigin = true;
             }
             else
             {
+                /*走到原點轉正*/
+                if (backOrigin)
+                {
+                    transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -180.0f, 0.0f));
+                    backOrigin = false;
+                }
                 am.SetInteger("Status", 0);
-                isWalking = false;
-                isOk = false;
             }
+            Debug.Log("現在沒在工作");
+
             timeOfSound += Time.deltaTime;
 
-            if(timeOfSound > random)
+            if (timeOfSound > random)
             {
                 sound.Play();
                 random = Random.Range(5.0f, 50.0f);
@@ -98,11 +92,11 @@ public class CatController : MonoBehaviour
             /*拿到第一個Task的內容*/
             if (!isDoingTask)
             {
-                temp = handleTask.getFirst();       
+                temp = handletaskAr.getFirst();
                 isDoingTask = true;
             }
 
-            
+
 
             /*如果是吃東西的任務的話*/
             if (temp.name == "bowlHasFood(Clone)" || temp.name == "bowlHasWater(Clone)")
@@ -130,9 +124,9 @@ public class CatController : MonoBehaviour
                         if (timeOfEating < 0)
                         {
                             cv.GetComponent<CanvasContorl>().ImageGenerate(1);
-                            Destroy(handleTask.getFirst());
+                            Destroy(handletaskAr.getFirst());
                             StatusController.setHealth(100.0f);
-                            handleTask.popTask();
+                            handletaskAr.popTask();
                             isDoingTask = false;
                             sound.Play();
                             timeOfSound = 0.0f;
@@ -146,9 +140,9 @@ public class CatController : MonoBehaviour
                         {
                             cv.GetComponent<CanvasContorl>().ImageGenerate(3);
 
-                            Destroy(handleTask.getFirst());
+                            Destroy(handletaskAr.getFirst());
                             StatusController.setWater(100.0f);
-                            handleTask.popTask();
+                            handletaskAr.popTask();
                             isDoingTask = false;
                             sound.Play();
                             timeOfSound = 0.0f;
@@ -158,17 +152,17 @@ public class CatController : MonoBehaviour
                 }
 
             }
-            else if(temp.name == "toy_ball(Clone)" || temp.name == "toy_gourd(Clone)" || temp.name == "toy_bone(Clone)")
+            else if (temp.name == "toy_ball(Clone)" || temp.name == "toy_gourd(Clone)" || temp.name == "toy_bone(Clone)")
             {
                 am.SetInteger("Status", 3);
-                
+
                 /*看向Task*/
                 if (ballFlag)
                 {
                     Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                     timeCount = timeCount + Time.deltaTime * speed;
-                    
+
                 }
                 playBall(temp);
                 if (Vector3.Distance(temp.transform.position, transform.position) <= 2.0f || temp.transform.position.y <= -2.0f)
@@ -189,15 +183,15 @@ public class CatController : MonoBehaviour
                 {
                     ballFlag = true;
                     playBallFlag = true;
-                    Destroy(handleTask.getFirst());
-                    handleTask.popTask();
+                    Destroy(handletaskAr.getFirst());
+                    handletaskAr.popTask();
                     isDoingTask = false;
                     am.speed = 1.0f;
                     speed = 2.5f;
                     print("到了");
                     cv.GetComponent<CanvasContorl>().ImageGenerate(2);
                     StatusController.setLove(StatusController.getLove() + 0.1f);
-                    
+
                 }
             }
             /*大便任務*/
@@ -208,10 +202,9 @@ public class CatController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                 timeCount = timeCount + Time.deltaTime * speed;
 
-                if (Vector3.Distance(temp.transform.position, transform.position) > 0.5f)
+                if (Vector3.Distance(temp.transform.position, transform.position) > 0.25f)
                 {
-                    
-                    speed = 9.0f;
+
                     am.speed = 1.5f;
                     walk();
                 }
@@ -222,7 +215,8 @@ public class CatController : MonoBehaviour
                     {
                         a = Instantiate<GameObject>(PooSource);
                         a.transform.position = transform.position;
-                        cv.GetComponent<CanvasContorl>().ImageGenerate(4); 
+                        a.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                        cv.GetComponent<CanvasContorl>().ImageGenerate(4);
                         generatePoo = true;
                     }
                     timeOfDoingPoo -= Time.deltaTime;
@@ -235,7 +229,7 @@ public class CatController : MonoBehaviour
                         am.speed = 1.0f;
                         speed = 2.5f;
                         timeOfDoingPoo = 3.0f;
-                        handleTask.popTask();
+                        handletaskAr.popTask();
                     }
                 }
             }
@@ -256,18 +250,18 @@ public class CatController : MonoBehaviour
                 {
                     transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, 140.0f, transform.rotation.z));
                     /*待修正*/
-                    am.SetInteger("Status", 7);
+                    am.SetInteger("Status", 5);
                     /********/
                     timeOfPlaying -= Time.deltaTime;
                     if (timeOfPlaying <= 0.0f)
                     {
                         cv.GetComponent<CanvasContorl>().ImageGenerate(2);
-                        Destroy(handleTask.getFirst());
+                        Destroy(handletaskAr.getFirst());
                         isDoingTask = false;
                         am.speed = 1.0f;
                         speed = 2.5f;
                         timeOfPlaying = 5.0f;
-                        handleTask.popTask();
+                        handletaskAr.popTask();
                         StatusController.setLove(StatusController.getLove() + 0.1f);
                     }
                 }
@@ -275,13 +269,13 @@ public class CatController : MonoBehaviour
 
             else if (temp.name == "jumpTask1" || temp.name == "jumpTask2" || temp.name == "jumpTask3")
             {
-                
+
                 print("跳跳跳" + temp.name);
                 /*看像task*/
-                
-                
+
+
                 /*先走到該跳的位置*/
-                if(temp.name == "jumpTask1")
+                if (temp.name == "jumpTask1")
                 {
                     Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
@@ -300,11 +294,11 @@ public class CatController : MonoBehaviour
                         isDoingTask = false;
                         am.speed = 1.0f;
                         speed = 2.5f;
-                        Destroy(handleTask.getFirst());
-                        handleTask.popTask();
+                        Destroy(handletaskAr.getFirst());
+                        handletaskAr.popTask();
                     }
                 }
-                else if(temp.name == "jumpTask2")
+                else if (temp.name == "jumpTask2")
                 {
 
                     if (Vector3.Distance(temp.transform.position, transform.position) > 0.05f)
@@ -316,7 +310,7 @@ public class CatController : MonoBehaviour
                         speed = 9.0f;
                         am.SetInteger("Status", 3);
                         timeOfChangeJump -= Time.deltaTime;
-                        if(timeOfChangeJump <= 0)
+                        if (timeOfChangeJump <= 0)
                         {
                             transform.position += transform.forward * Time.deltaTime * speed;
                         }
@@ -329,8 +323,8 @@ public class CatController : MonoBehaviour
                         timeOfChangeJump = 1.6f;
                         transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
                         isDoingTask = false;
-                        Destroy(handleTask.getFirst());
-                        handleTask.popTask();
+                        Destroy(handletaskAr.getFirst());
+                        handletaskAr.popTask();
                     }
                 }
                 else if (temp.name == "jumpTask3")
@@ -356,8 +350,8 @@ public class CatController : MonoBehaviour
                         transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
                         isDoingTask = false;
                         cv.GetComponent<CanvasContorl>().ImageGenerate(2);
-                        Destroy(handleTask.getFirst());
-                        handleTask.popTask();
+                        Destroy(handletaskAr.getFirst());
+                        handletaskAr.popTask();
                         GameObject a = GameObject.Find("toy_jump(Clone)");
                         Destroy(a);
                     }
@@ -371,7 +365,7 @@ public class CatController : MonoBehaviour
         timeOfHunger += Time.deltaTime;
         timeOfHeart += Time.deltaTime;
         timeOfWater += Time.deltaTime;
-        if(!generatePoo)
+        if (!generatePoo)
             timeOfPoo += Time.deltaTime;
         if (timeOfHunger > 5.0f && StatusController.getHealth() > 0.0f)
         {
@@ -382,7 +376,7 @@ public class CatController : MonoBehaviour
         /*每隔3秒扣除口渴值*/
         if (timeOfWater > 3.0f && StatusController.getWater() > 0.0f)
         {
-            
+
             StatusController.minusWater(0.1f);
             timeOfWater = 0.0f;
         }
@@ -398,19 +392,19 @@ public class CatController : MonoBehaviour
         {
             Debug.Log("大便囉");
             timeOfPoo = 0.0f;
-            handleTask.pushTask(Poo);
+            handletaskAr.pushTask(Poo);
         }
 
     }
- 
 
-   
+
+
 
     private void decideDirection()
     {
         direction = Random.Range(0.0f, 360.0f);
         transform.eulerAngles = new Vector3(0.0f, direction, 0.0f);
-        timeOfWalking = Random.Range(1.0f,6.0f);
+        timeOfWalking = Random.Range(1.0f, 6.0f);
         isOk = true;
         Debug.Log("決定方向了");
     }
@@ -418,14 +412,14 @@ public class CatController : MonoBehaviour
     {
         am.SetInteger("Status", 1);
         transform.position += transform.forward * Time.deltaTime * speed;
-  
+
         //Debug.Log("正在走路");
     }
 
- 
+
     private void eating()
     {
-        
+
         am.SetInteger("Status", 2);
         //Debug.Log("正在吃飯");
     }
@@ -434,8 +428,8 @@ public class CatController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         bool flag = false;
-        
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && playBallFlag) 
+
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && playBallFlag)
         {
             Vector3 Direction = hit.point - Camera.main.transform.position;
 
@@ -459,18 +453,12 @@ public class CatController : MonoBehaviour
             am.speed = 2.0f;
             walk();
         }
-       
+
     }
 
-    public void OnTriggerEnter(Collider other)
-    {
-        if(handleTask.isEmpty())
-            timeOfWalking = 0.0f;
-    }
 
     public void playSound()
     {
         sound.Play();
     }
-  
 }

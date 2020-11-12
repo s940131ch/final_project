@@ -56,46 +56,41 @@ public class ToyButtons : MonoBehaviour
             Vector3 jump1 = new Vector3(6, 9, 1);
             Vector3 jump2 = new Vector3(-36, 10, 26);
             Vector3 jump3 = new Vector3(-12, -12, 47);
-            Vector3 jump4 = new Vector3(-35, 8, 65);
-            Vector3 jump5 = new Vector3(-19, 10, 87);
+         
 
             GameObject jumpPos0 = new GameObject();
             jumpPos0.transform.SetParent(jump.transform);
             jumpPos0.transform.localPosition = jump1;
             jumpPos0.name = "jumpTask1";
 
-            
-
-            Vector3 temp;
-            int a = Random.Range(2, 6);
-            switch(a)
-            {
-                case 1:
-                    temp = jump2;
-                    break;
-                case 2:
-                    temp = jump3;
-                    break;
-                case 3:
-                    temp = jump4;
-                    break;
-                case 4:
-                    temp = jump5;
-                    break;
-                default:
-                    temp = jump5;
-                    break;
-            }
 
             GameObject jumpPos1 = new GameObject();
+
+
+            Vector3 temp;
+            int a = Random.Range(0, 2);
+            if (a == 0)
+            {
+                temp = jump3;
+            }
+            else
+            {
+                temp = jump2;
+            }
 
             jumpPos1.transform.SetParent(jump.transform);
             jumpPos1.transform.localPosition = temp;
             jumpPos1.name = "jumpTask2";
 
+            GameObject jumpPos2 = new GameObject();
+            jumpPos2.transform.SetParent(jump.transform);
+            jumpPos2.transform.localPosition = jump1;
+            jumpPos2.name = "jumpTask3";
+
             handleTask.pushTask(jumpPos0);
             handleTask.pushTask(jumpPos1);
-            
+            handleTask.pushTask(jumpPos2);
+
         }
     }
 

@@ -6,7 +6,7 @@ public static class handletaskAr
 { 
 	static int Front = 0;
 	static int Rear = 0;
-	public static int MAX = 5;
+	public static int MAX = 15;
 	public static GameObject[] taskQueue = new GameObject[MAX];
 	public static void pushTask(GameObject obj)
 	{
