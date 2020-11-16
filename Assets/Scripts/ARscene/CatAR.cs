@@ -17,7 +17,7 @@ public class CatAR : MonoBehaviour
     float timeOfChangeJump = 1.25f;
     float timeOfDoingPoo = 3.0f; //大便過程
     float timeOfSound = 0.0f;
-    float speed = 2.5f;         //走路速度
+    float speed = 1.0f;         //走路速度
     bool isOk = false;          //是否決定好方向?
     bool isDoingTask = false;
     bool isWalking = false;     //有在走路嗎?
@@ -97,56 +97,55 @@ public class CatAR : MonoBehaviour
             }
 
 
-
             /*如果是吃東西的任務的話*/
-            if (temp.name == "bowlHasFood(Clone)" || temp.name == "bowlHasWater(Clone)")
+            if (temp.name == "bowlHasFood" || temp.name == "bowlHasWater")
             {
+                print("吃東西任務");
                 /*看向Task*/
                 Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                 timeCount = timeCount + Time.deltaTime * speed;
                 /*走向餐盤*/
-                if (Vector3.Distance(temp.transform.position, transform.position) >= 2.0f)
+                if (Vector3.Distance(temp.transform.position, transform.position) >= 0.25f)
                 {
                     walk();
-                    if (temp.name == "bowlHasFood(Clone)")
-                        timeOfEating = 5.0f;
-                    else if (temp.name == "bowlHasWater(Clone)")
-                        timeOfDrinking = 5.0f;
+                    if (temp.name == "bowlHasFood")
+                        timeOfEating = 3.0f;
+                    else if (temp.name == "bowlHasWater")
+                        timeOfDrinking = 3.0f;
                 }
                 /*走到之後開始吃*/
                 else
                 {
+                    Debug.Log("開吃");
                     eating();
-                    if (temp.name == "bowlHasFood(Clone)")
+                    if (temp.name == "bowlHasFood")
                     {
                         timeOfEating -= Time.deltaTime;
                         if (timeOfEating < 0)
                         {
                             cv.GetComponent<CanvasContorl>().ImageGenerate(1);
-                            Destroy(handletaskAr.getFirst());
+                            
                             StatusController.setHealth(100.0f);
                             handletaskAr.popTask();
                             isDoingTask = false;
                             sound.Play();
                             timeOfSound = 0.0f;
-                            random = Random.Range(5.0f, 50.0f);
+                            timeOfEating = 3.0f;
                         }
                     }
-                    else if (temp.name == "bowlHasWater(Clone)")
+                    else if (temp.name == "bowlHasWater")
                     {
                         timeOfDrinking -= Time.deltaTime;
                         if (timeOfDrinking < 0)
                         {
                             cv.GetComponent<CanvasContorl>().ImageGenerate(3);
-
-                            Destroy(handletaskAr.getFirst());
                             StatusController.setWater(100.0f);
                             handletaskAr.popTask();
                             isDoingTask = false;
                             sound.Play();
                             timeOfSound = 0.0f;
-                            random = Random.Range(5.0f, 50.0f);
+                            timeOfDrinking = 3.0f;
                         }
                     }
                 }
@@ -165,29 +164,31 @@ public class CatAR : MonoBehaviour
 
                 }
                 playBall(temp);
-                if (Vector3.Distance(temp.transform.position, transform.position) <= 2.0f || temp.transform.position.y <= -2.0f)
+                if (Vector3.Distance(temp.transform.position, transform.position) <= 0.3f || temp.transform.position.y <= -2.0f)
                 {
                     ballFlag = false;
                     temp.transform.parent = gameObject.transform;
                     temp.transform.localPosition = new Vector3(0, 0.35f, 0.6f);
                     temp.transform.rotation = Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f));
+
                     if (!ballFlag)
                     {
-                        Quaternion A = Quaternion.LookRotation(new Vector3(0.0f, -2.0f, 0.0f) - transform.position);
+                        Quaternion A = Quaternion.LookRotation(new Vector3(0.0f, -1.0f, 0.0f) - transform.position);
                         transform.rotation = Quaternion.Slerp(transform.rotation, A, timeCount);
                         timeCount = timeCount + Time.deltaTime * speed;
                     }
                     walk();
                 }
-                if ((Vector3.Distance(new Vector3(0.0f, -2.0f, 0.0f), transform.position) <= 2.0f && !ballFlag) || temp.transform.position.y < -10.0f)
+
+                if ((Vector3.Distance(new Vector3(0.0f, -1.0f, 0.0f), transform.position) <= 0.3f && !ballFlag) || temp.transform.position.y < -10.0f)
                 {
                     ballFlag = true;
                     playBallFlag = true;
-                    Destroy(handletaskAr.getFirst());
+                    Destroy(GameObject.Find(temp.name));
                     handletaskAr.popTask();
                     isDoingTask = false;
                     am.speed = 1.0f;
-                    speed = 2.5f;
+                    speed = 1.0f;
                     print("到了");
                     cv.GetComponent<CanvasContorl>().ImageGenerate(2);
                     StatusController.setLove(StatusController.getLove() + 0.1f);
@@ -227,13 +228,13 @@ public class CatAR : MonoBehaviour
                         isDoingTask = false;
                         generatePoo = false;
                         am.speed = 1.0f;
-                        speed = 2.5f;
+                        speed = 2.0f;
                         timeOfDoingPoo = 3.0f;
                         handletaskAr.popTask();
                     }
                 }
             }
-            else if (temp.name == "toy_scratch(Clone)")
+            else if (temp.name == "toy_scratch")
             {
                 Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
@@ -242,7 +243,7 @@ public class CatAR : MonoBehaviour
 
                 if (Vector3.Distance(temp.transform.position, transform.position) > 0.05f)
                 {
-                    speed = 9.0f;
+                    speed = 2.0f;
                     am.speed = 1.5f;
                     walk();
                 }
@@ -256,10 +257,10 @@ public class CatAR : MonoBehaviour
                     if (timeOfPlaying <= 0.0f)
                     {
                         cv.GetComponent<CanvasContorl>().ImageGenerate(2);
-                        Destroy(handletaskAr.getFirst());
+                        
                         isDoingTask = false;
                         am.speed = 1.0f;
-                        speed = 2.5f;
+                        speed = 1.0f;
                         timeOfPlaying = 5.0f;
                         handletaskAr.popTask();
                         StatusController.setLove(StatusController.getLove() + 0.1f);
@@ -293,8 +294,8 @@ public class CatAR : MonoBehaviour
 
                         isDoingTask = false;
                         am.speed = 1.0f;
-                        speed = 2.5f;
-                        Destroy(handletaskAr.getFirst());
+                        speed = 1.0f;
+                        
                         handletaskAr.popTask();
                     }
                 }
@@ -307,7 +308,7 @@ public class CatAR : MonoBehaviour
                         Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                         transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                         timeCount = timeCount + Time.deltaTime * speed;
-                        speed = 9.0f;
+                        speed = 2.0f;
                         am.SetInteger("Status", 3);
                         timeOfChangeJump -= Time.deltaTime;
                         if (timeOfChangeJump <= 0)
@@ -323,7 +324,7 @@ public class CatAR : MonoBehaviour
                         timeOfChangeJump = 1.6f;
                         transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
                         isDoingTask = false;
-                        Destroy(handletaskAr.getFirst());
+                        
                         handletaskAr.popTask();
                     }
                 }
@@ -336,7 +337,7 @@ public class CatAR : MonoBehaviour
                         Quaternion lookOnLook = Quaternion.LookRotation(temp.transform.position - transform.position);
                         transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, timeCount);
                         timeCount = timeCount + Time.deltaTime * speed;
-                        speed = 9.0f;
+                        speed = 2.0f;
                         timeOfChangeJump -= Time.deltaTime;
                         if (timeOfChangeJump <= 0)
                         {
@@ -350,10 +351,10 @@ public class CatAR : MonoBehaviour
                         transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
                         isDoingTask = false;
                         cv.GetComponent<CanvasContorl>().ImageGenerate(2);
-                        Destroy(handletaskAr.getFirst());
+                        
                         handletaskAr.popTask();
-                        GameObject a = GameObject.Find("toy_jump(Clone)");
-                        Destroy(a);
+                        
+                        
                     }
                 }
 
@@ -449,8 +450,8 @@ public class CatAR : MonoBehaviour
         }
         if (newBall.transform.position.y <= 0.25f)
         {
-            speed = 9.0f;
-            am.speed = 2.0f;
+            speed = 2.0f;
+            am.speed = 1.5f;
             walk();
         }
 

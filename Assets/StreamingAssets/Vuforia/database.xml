@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="playGuard" size="1.000000 1.006048" />
+    <ImageTarget name="playBone" size="1.000000 1.036145" />
+    <ImageTarget name="playBall" size="1.000000 1.006048" />
+    <ImageTarget name="playScratch" size="1.000000 1.000000" />
+    <ImageTarget name="playJump" size="1.000000 1.000000" />
     <ImageTarget name="foodTarget" size="1.000000 1.000000" />
     <ImageTarget name="Water" size="1.000000 1.142857" />
-    <ImageTarget name="food" size="1.000000 1.418919" />
     <ImageTarget name="cat" size="1.000000 1.016073" />
   </Tracking>
 </QCARConfig>

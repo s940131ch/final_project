@@ -100,7 +100,7 @@ public class ToyButtons : MonoBehaviour
         {
             scratch = Instantiate<GameObject>(scratchSource);
             scratch.GetComponent<Transform>().position = new Vector3(-9.4f, -2.0f, 0.0f);
-            scratch.GetComponent<Transform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            scratch.GetComponent<Transform>().localScale = new Vector3(0.16f, 0.16f, 0.16f);
             scratch.GetComponent<Transform>().rotation = Quaternion.Euler(new Vector3(-90.0f, 0.0f, -90.0f));
             handleTask.pushTask(scratch);
         }
