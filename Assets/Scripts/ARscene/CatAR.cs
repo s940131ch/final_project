@@ -251,7 +251,7 @@ public class CatAR : MonoBehaviour
                 {
                     transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, 140.0f, transform.rotation.z));
                     /*待修正*/
-                    am.SetInteger("Status", 5);
+                    am.SetInteger("Status", 7);
                     /********/
                     timeOfPlaying -= Time.deltaTime;
                     if (timeOfPlaying <= 0.0f)

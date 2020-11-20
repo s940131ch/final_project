@@ -41,6 +41,10 @@ MonoBehaviour:
   - changeMasterClient
   - changeMasterRPC
   - MasterFoundFood
+  - MasterFoundWater
+  - MasterFoundBall
+  - MasterFoundScratch
+  - MasterFoundJump
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

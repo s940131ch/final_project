@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class CanvasContorl : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public class CanvasContorl : MonoBehaviour
     public void ImageGenerate(int i)
     {
         GameObject im = Instantiate(imTarget) as GameObject;
+        im.AddComponent<PhotonView>();
+        im.AddComponent<PhotonTransformView>();
+        im.GetComponent<PhotonTransformView>().m_SynchronizePosition = true;
+        im.GetComponent<PhotonTransformView>().m_SynchronizeRotation = true;
+        im.GetComponent<PhotonTransformView>().m_SynchronizeScale = true;
         Sprite temp;
         switch (i)
         {

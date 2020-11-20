@@ -8,8 +8,8 @@ public class handleTaskMutli : MonoBehaviourPun
 	
 	int Front = 0;
 	int Rear = 0;
-	public int MAX = 5;
-	public GameObject[] taskQueue = new GameObject[5];
+	public int MAX = 15;
+	public GameObject[] taskQueue = new GameObject[15];
 	
 	public void pushTask(GameObject obj)
 	{

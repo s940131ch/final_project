@@ -88,16 +88,12 @@ public class ARTarget : MonoBehaviour
     {
         if (!hasCreateJump)
         {
-
-
-           
-
             Vector3 jump1 = new Vector3(6, 9, 1);
             Vector3 jump2 = new Vector3(-36, 10, 26);
             Vector3 jump3 = new Vector3(-12, -12, 47);
 
-
             GameObject jumpPos0 = new GameObject();
+
             jumpPos0.transform.SetParent(Jump.transform);
             jumpPos0.transform.localPosition = jump1;
             jumpPos0.name = "jumpTask1";
@@ -119,10 +115,12 @@ public class ARTarget : MonoBehaviour
 
             jumpPos1.transform.SetParent(Jump.transform);
             jumpPos1.transform.localPosition = temp;
+
             jumpPos1.name = "jumpTask2";
 
             GameObject jumpPos2 = new GameObject();
             jumpPos2.transform.SetParent(Jump.transform);
+
             jumpPos2.transform.localPosition = jump1;
             jumpPos2.name = "jumpTask3";
 
