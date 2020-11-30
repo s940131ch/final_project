@@ -33,7 +33,6 @@ public class gameNormalManager : MonoBehaviour
             Debug.Log("記得歸零 臭傻逼");
             time = 0.0f;
         }
-
     }
 
     public void onClick(string scene)

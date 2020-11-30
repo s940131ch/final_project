@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Vuforia;
 
+
 public class GameManager : MonoBehaviourPun
 {
     [SerializeField]
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviourPun
     void Update()
     {
         roundPlayer.text = "現在是" + PhotonNetwork.MasterClient.NickName + "的回合";
+        
     }
 
     public void foundCat()

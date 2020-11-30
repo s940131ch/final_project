@@ -23,6 +23,7 @@ public class MultiARCatController : MonoBehaviourPun
     bool backOrigin = true;
     float timeCount = 0.0f;
 
+    bool RPCFlag = true;
     float timeOfSound = 0.0f;
     float timeOfPoo = 0.0f;
     bool ballFlag = true;
@@ -154,7 +155,11 @@ public class MultiARCatController : MonoBehaviourPun
                         temp.transform.parent = gameObject.transform;
                         temp.transform.localPosition = new Vector3(0, 0.35f, 0.6f);
                         temp.transform.rotation = Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f));
-
+                        if (RPCFlag)
+                        {
+                            RPCFlag = false;
+                            photonView.RPC("MasterFoundToy", RpcTarget.Others, temp.name);
+                        }
                         if (!ballFlag)
                         {
                             Quaternion A = Quaternion.LookRotation(new Vector3(0.0f, -1.0f, 0.0f) - transform.position);
@@ -168,6 +173,7 @@ public class MultiARCatController : MonoBehaviourPun
                     {
                         ballFlag = true;
                         playBallFlag = true;
+                        RPCFlag = true;
                         /****/
                         PhotonView.Destroy(tasks.getFirst());
                         /****/
@@ -400,13 +406,16 @@ public class MultiARCatController : MonoBehaviourPun
         Debug.Log("沒找到貓");
 
     }*/
-    private void decideDirection()
-    {
-        direction = Random.Range(0.0f, 360.0f);
-        transform.eulerAngles = new Vector3(0.0f, direction, 0.0f);
-        timeOfWalking = Random.Range(1.0f, 6.0f);
-        isOk = true;
-        // Debug.Log("決定方向了");
+    [PunRPC]
+    public void MasterFoundToy(string t)
+    { 
+        GameObject temp = GameObject.Find(t);
+        if (temp != null)
+            Debug.Log(temp + "不為空");
+        temp.transform.parent = gameObject.transform;
+        temp.transform.localPosition = new Vector3(0, 0.35f, 0.6f);
+        temp.transform.rotation = Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f));
+        Debug.Log("玩具的位置" + temp.transform.position);
     }
     private void walk()
     {

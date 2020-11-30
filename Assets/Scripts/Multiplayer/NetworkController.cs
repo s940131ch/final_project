@@ -4,7 +4,8 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
-using Photon.Pun.Demo.Cockpit;
+
+using UnityEngine.SceneManagement;
 
 public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
 {
@@ -31,7 +32,10 @@ public class NetworkController : MonoBehaviourPunCallbacks , ILobbyCallbacks
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     private void Connect()
