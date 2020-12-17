@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="ballT" size="1.000000 1.000000" />
+    <ImageTarget name="bondT" size="1.000000 1.000000" />
     <ImageTarget name="playGuard" size="1.000000 1.006048" />
     <ImageTarget name="playBone" size="1.000000 1.036145" />
     <ImageTarget name="playBall" size="1.000000 1.006048" />

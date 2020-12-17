@@ -220,72 +220,19 @@ public class GameManager : MonoBehaviourPun
         Debug.Log("抓板的位置" + temp.transform.position);
     }
 
-    public void FoundJump()
-    {
-        /*該玩家回合才可以做事情*/
-        if (PhotonNetwork.IsMasterClient)
-        {
-            if (tempJump == null)
-            {
-                tempJump = PhotonNetwork.Instantiate(jumpPrefab.name, new Vector3(0, 0, 0), Quaternion.identity);
-                tempJump.name = "toy_jump";
-                tempJump.transform.parent = jumpTarget.transform;
-                tempJump.transform.localPosition = new Vector3(0, 0, 0);
-                tempJump.transform.localScale = new Vector3(0.024f, 0.024f, 0.024f);
-                tempJump.transform.localRotation = Quaternion.Euler(new Vector3(-90.0f, 0.0f, -90.0f));
-               
-
-                Vector3 jump1 = new Vector3(6, 9, 1);
-                Vector3 jump2 = new Vector3(-36, 10, 26);
-                Vector3 jump3 = new Vector3(-12, -12, 47);
-
-                GameObject jumpPos0 = new GameObject();
-                GameObject jumpPos1 = new GameObject();
-                jumpPos0.AddComponent<PhotonView>();
-                jumpPos0.transform.SetParent(tempJump.transform);
-                jumpPos0.transform.localPosition = jump1;
-                jumpPos0.name = "jumpTask1";
-
-
-                Vector3 temp;
-                int a = Random.Range(0, 2);
-                if (a == 0)
-                {
-                    temp = jump3;
-                }
-                else
-                {
-                    temp = jump2;
-                }
-
-                jumpPos1.transform.SetParent(tempJump.transform);
-                jumpPos1.transform.localPosition = temp;
-                jumpPos1.name = "jumpTask2";
-                jumpPos1.AddComponent<PhotonView>();
-                GameObject jumpPos2 = new GameObject();
-                jumpPos2.transform.SetParent(tempJump.transform);
-                jumpPos2.transform.localPosition = jump1;
-                jumpPos2.name = "jumpTask3";
-                jumpPos2.AddComponent<PhotonView>();
-                photonView.RPC("MasterFoundJump", RpcTarget.Others, jumpTarget.transform.position);
-
-                tasks.pushTask(jumpPos0);
-                tasks.pushTask(jumpPos1);
-                tasks.pushTask(jumpPos2);
-            }
-        }
-    }
-    [PunRPC]
-    public void MasterFoundJump(Vector3 t)
+    /*public void FoundJump()*/
+    //[PunRPC]
+   /* public void MasterFoundJump(Vector3 t)
     {
         Debug.Log(t);
         Debug.Log("收到訊息");
         GameObject temp = GameObject.Find("toy_jump(Clone)");
+        temp.name = "toy_jump";
         if (temp != null)
             Debug.Log(temp + "不為空");
         temp.transform.position = t;
         Debug.Log("抓板的位置" + temp.transform.position);
-    }
+    }*/
 
     public void changeMaster()
     {
