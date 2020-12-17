@@ -191,7 +191,7 @@ public class CatAR : MonoBehaviour
                     speed = 1.0f;
                     print("到了");
                     cv.GetComponent<CanvasContorl>().ImageGenerate(2);
-                    StatusController.setLove(StatusController.getLove() + 0.1f);
+                    StatusController.setLove(StatusController.getLove() + 1f);
 
                 }
             }
@@ -263,7 +263,7 @@ public class CatAR : MonoBehaviour
                         speed = 1.0f;
                         timeOfPlaying = 5.0f;
                         handletaskAr.popTask();
-                        StatusController.setLove(StatusController.getLove() + 0.1f);
+                        StatusController.setLove(StatusController.getLove() + 1f);
                     }
                 }
             }
@@ -324,7 +324,7 @@ public class CatAR : MonoBehaviour
                         timeOfChangeJump = 1.6f;
                         transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
                         isDoingTask = false;
-                        
+                        StatusController.setLove(StatusController.getLove() + 1f);
                         handletaskAr.popTask();
                     }
                 }

@@ -10,6 +10,7 @@ public class menuMananger : MonoBehaviour
     public InputField id;
     public InputField password;
     public AudioSource sound;
+    public string server_ip = "203.222.24.37";
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +60,7 @@ public class menuMananger : MonoBehaviour
 
     IEnumerator<WWW> UpdatePetData(string ID, string Pass, int HasPet, int PetType)
     {
-        WWW www = new WWW("http://203.222.25.154/Update.php?Username=" + ID + "&Password=" + Pass + "&HasPet=" + HasPet + "&PetType=" + PetType);
+        WWW www = new WWW("http://"+server_ip+"/Update.php?Username=" + ID + "&Password=" + Pass + "&HasPet=" + HasPet + "&PetType=" + PetType);
         yield return www;
 
         if (www.error != null)

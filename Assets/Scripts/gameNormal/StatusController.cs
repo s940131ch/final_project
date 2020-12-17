@@ -9,7 +9,7 @@ public static class StatusController
     static private float health = 100.0f;
     static private float water = 100.0f;
     static private float love = 100.0f;
-    static private int PetType = 1;
+    static private int PetType = 2;
     static private int HasPet = 1;
     static private string username = "abc2";
     static private string password = "abc";

@@ -8,15 +8,19 @@ public class gameNormalManager : MonoBehaviour
 {
     public GameObject pet1;
     public GameObject pet2;
+    GameObject t;
     float time = 0.0f;
-    public string server_ip = "203.222.25.154";
+    public string server_ip = "203.222.24.37";
     // Start is called before the first frame update
     void Start()
     {
-        if (StatusController.getPetType() == 1)
-            Instantiate<GameObject>(pet1, new Vector3(-0.099f, 0.12f, -0.13f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
-        else if (StatusController.getPetType() == 2)
-            Instantiate<GameObject>(pet2, new Vector3(-0.099f, 0.12f, -0.13f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+        print(StatusController.getPetType());
+        if (StatusController.getPetType() == 2)
+        {
+            t = Instantiate<GameObject>(pet2, new Vector3(1.56f,-2f, -0f), new Quaternion(0.0f, 180.0f, 0.0f, 0.0f));
+            t.transform.localScale = new Vector3(3, 3, 3);
+            print("AAA");
+        }
     }
 
     // Update is called once per frame
@@ -42,7 +46,8 @@ public class gameNormalManager : MonoBehaviour
     }
     public void menuClick()
     {
-        StartCoroutine(backMenu());
+        if (handleTask.isEmpty())
+            StartCoroutine(backMenu());
     }
     public void Save()
     {

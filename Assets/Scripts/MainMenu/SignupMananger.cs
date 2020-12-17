@@ -16,6 +16,7 @@ public class SignupMananger : MonoBehaviour
     bool loadingFlag = false;
     float time = 0.0f;
     float angle = 0.0f;
+    public string server_ip = "203.222.24.37";
     void Update()
     {
 
@@ -54,7 +55,7 @@ public class SignupMananger : MonoBehaviour
 
     IEnumerator signup()
     {
-        WWW www = new WWW("http://203.222.25.154/Check.php?username=" + ID.text + "&password=" + Password.text);
+        WWW www = new WWW("http://" + server_ip + "/Check.php?username=" + ID.text + "&password=" + Password.text);
         LoadingMessage.SetActive(true);
         loadingFlag = true;
         yield return www;
@@ -89,7 +90,7 @@ public class SignupMananger : MonoBehaviour
     IEnumerator realsignup()
     {
 
-        WWW www = new WWW("http://203.222.24.233/Check.php?username=" + ID.text + "&password=" + Password.text);
+        WWW www = new WWW("http://" + server_ip + "/Check.php?username=" + ID.text + "&password=" + Password.text);
         LoadingMessage.SetActive(true);
         loadingFlag = true;
         yield return www;
@@ -114,7 +115,7 @@ public class SignupMananger : MonoBehaviour
             }
             else
             {
-                www = new WWW("http://203.222.24.233/Signup.php?username=" + ID.text + "&password=" + Password.text);
+                www = new WWW("http://" + server_ip + "/Signup.php?username=" + ID.text + "&password=" + Password.text);
                 LoadingMessage.SetActive(true);
                 loadingFlag = true;
                 yield return www;

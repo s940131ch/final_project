@@ -47,7 +47,7 @@ public class CatController : MonoBehaviour
         transform.position = new Vector3(0.0f, -2.0f, 0.0f);
         am = GetComponent<Animator>();
         am.SetInteger("Status", 0);
-
+        Poo = GameObject.Find("catLittleBox");
         /*家平的傑作*/
         sound = GetComponent<AudioSource>();
         sound.Play();
@@ -196,7 +196,7 @@ public class CatController : MonoBehaviour
                     speed = 2.5f;
                     print("到了");
                     cv.GetComponent<CanvasContorl>().ImageGenerate(2);
-                    StatusController.setLove(StatusController.getLove() + 0.1f);
+                    StatusController.setLove(StatusController.getLove() + 1f);
                     
                 }
             }
@@ -268,7 +268,7 @@ public class CatController : MonoBehaviour
                         speed = 2.5f;
                         timeOfPlaying = 5.0f;
                         handleTask.popTask();
-                        StatusController.setLove(StatusController.getLove() + 0.1f);
+                        StatusController.setLove(StatusController.getLove() + 1f);
                     }
                 }
             }
@@ -356,6 +356,7 @@ public class CatController : MonoBehaviour
                         transform.rotation = Quaternion.Euler(new Vector3(0.0f, transform.rotation.y, 0.0f));
                         isDoingTask = false;
                         cv.GetComponent<CanvasContorl>().ImageGenerate(2);
+                        StatusController.setLove(StatusController.getLove() + 1f);
                         Destroy(handleTask.getFirst());
                         handleTask.popTask();
                         GameObject a = GameObject.Find("toy_jump(Clone)");

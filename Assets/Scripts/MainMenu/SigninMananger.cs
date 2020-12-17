@@ -20,6 +20,7 @@ public class SigninMananger : MonoBehaviour
     float angle = 0.0f;
     bool loadingFlag = false;
     public AudioSource sound;
+    public string server_ip = "203.222.24.37";
     void Update()
     {
 
@@ -56,7 +57,7 @@ public class SigninMananger : MonoBehaviour
     {
         string ID = id.text;
         string Pass = password.text;
-        WWW www = new WWW("http://203.222.25.154/search.php?username=" + ID + "&password=" + Pass);
+        WWW www = new WWW("http://" + server_ip + "/search.php?username=" + ID + "&password=" + Pass);
         LoadingMessage.SetActive(true);
         loadingFlag = true;
         yield return www;
